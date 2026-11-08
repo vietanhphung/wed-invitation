@@ -286,11 +286,31 @@ function setupReveal() {
 }
 
 /* ---------- Chrome: cover screen, header, menu ---------- */
+const SCROLL_KEYS = new Set([' ', 'PageUp', 'PageDown', 'Home', 'End', 'ArrowUp', 'ArrowDown']);
+const blockScroll = e => e.preventDefault();
+const blockScrollKeys = e => { if (SCROLL_KEYS.has(e.key) && e.target.tagName !== 'BUTTON') e.preventDefault(); };
+function lockCover() {
+  // overflow:hidden alone doesn't stop iOS Safari, wheel momentum or keyboard scrolling
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  scrollTo(0, 0);
+  document.documentElement.classList.add('locked');
+  addEventListener('wheel', blockScroll, { passive: false });
+  addEventListener('touchmove', blockScroll, { passive: false });
+  addEventListener('keydown', blockScrollKeys);
+}
+function unlockCover() {
+  removeEventListener('wheel', blockScroll);
+  removeEventListener('touchmove', blockScroll);
+  removeEventListener('keydown', blockScrollKeys);
+  document.documentElement.classList.remove('locked');
+  scrollTo(0, 0);
+}
+
 function setupChrome() {
-  document.body.style.overflow = 'hidden';
+  lockCover();
   $('#open-btn').addEventListener('click', () => {
     $('#intro').classList.add('hidden');
-    document.body.style.overflow = '';
+    unlockCover();
     setupReveal();
     playMusic();
   });

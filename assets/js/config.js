@@ -33,26 +33,25 @@ window.WEDDING = {
   quote: ["Và rồi, mọi con đường", "đều dẫn", "về nhau."], // last part is the accent
 
   /* Photos — each entry is a path, or { src, pos } where pos is the focal
-     point used when cropping, e.g. "50% 30%" (lower 2nd number = show more top). */
+     point used when cropping, e.g. "50% 30%" (lower 2nd number = show more top).
+     Originals live in photos/<same name>.jpg; rebuild with tools/rebuild_photos.sh */
   photos: {
-    cover:   { src: "assets/photos/cover.webp",   pos: "50% 45%" },   // FALL CONCEPT/HY707180
-    city:    ["assets/photos/city-1.webp",                          // CITY VIBE/HYC08673
-              "assets/photos/city-2.webp"],                         // CITY VIBE/HYC08193
-    forest:  ["assets/photos/forest-1.webp",                        // FALL CONCEPT/HYC09320
-              "assets/photos/forest-2.webp"],                       // FALL CONCEPT/HYC09682
-    wide:    { src: "assets/photos/wide.webp",    pos: "50% 62%" },   // FALL CONCEPT/HYC09520
-    date:    { src: "assets/photos/date.webp",    pos: "50% 50%" },   // FALL CONCEPT/HYC09739
-    closing: { src: "assets/photos/closing.webp", pos: "50% 72%" },   // FALL CONCEPT/HYC08872
+    cover:   { src: "assets/photos/cover.webp",   pos: "50% 45%" },
+    city:    ["assets/photos/city-1.webp", "assets/photos/city-2.webp"],
+    forest:  ["assets/photos/forest-1.webp", "assets/photos/forest-2.webp"],
+    wide:    { src: "assets/photos/wide.webp",    pos: "50% 62%" },
+    date:    { src: "assets/photos/date.webp",    pos: "50% 50%" },
+    closing: { src: "assets/photos/closing.webp", pos: "50% 72%" },
     // gift cards (tall arch frames)
-    giftGroom: { src: "assets/photos/gift-groom.webp", pos: "50% 50%" }, // CITY VIBE/HYC08090_(2), straightened: --rotate -6
-    giftBride: { src: "assets/photos/gift-bride.webp", pos: "50% 50%" }, // CITY VIBE/HY705592, zoomed: --crop 0.19,0.375,0.81,1
+    giftGroom: { src: "assets/photos/gift-groom.webp", pos: "50% 50%" },
+    giftBride: { src: "assets/photos/gift-bride.webp", pos: "50% 50%" },
     gallery: [
-      "assets/photos/gallery-1.webp",   // CITY VIBE/HY704956 — under the veil
-      { src: "assets/photos/gallery-2.webp", pos: "30% 60%" }, // CITY VIBE/HY706765 — wine bar
-      "assets/photos/gallery-3.webp",   // FALL CONCEPT/HY707511 — forest kiss
-      "assets/photos/gallery-4.webp",   // CITY VIBE/HYC08544 — close-up
-      "assets/photos/gallery-5.webp",   // FALL CONCEPT/HYC09401 — throwing leaves
-      { src: "assets/photos/gallery-6.webp", pos: "50% 60%" } // CITY VIBE/HYC08314 — City Hall ramp
+      "assets/photos/gallery-1.webp",                          // under the veil
+      { src: "assets/photos/gallery-2.webp", pos: "30% 60%" }, // wine bar
+      "assets/photos/gallery-3.webp",                          // forest kiss
+      "assets/photos/gallery-4.webp",                          // close-up
+      "assets/photos/gallery-5.webp",                          // throwing leaves
+      { src: "assets/photos/gallery-6.webp", pos: "50% 60%" }  // City Hall ramp
     ]
   },
 
@@ -75,7 +74,7 @@ window.WEDDING = {
 
   // Background music: put an mp3 in assets/music/ ("" to hide the player)
   music: "assets/music/song.mp3",
-  musicTitle: "Tên bài hát · Ca sĩ",
+  musicTitle: "小幸運 · A Little Happiness (Piano)",
   musicStart: 0,              // seconds — jump straight to the chorus
 
   leaves: true                // a few slow falling maple leaves

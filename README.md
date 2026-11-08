@@ -7,15 +7,15 @@ cưới, album ảnh, địa điểm, mã QR mừng cưới và nhạc nền.
 ## Tuỳ chỉnh
 
 1. **Thông tin**: sửa `assets/js/config.js` (tên, ngày giờ, ngày âm lịch, lời mời, câu chuyện, địa điểm, tài khoản, nhạc).
-2. **Ảnh**: chép ảnh gốc vào thư mục `photos/` (thư mục này không được đưa lên mạng), rồi chạy:
+2. **Ảnh**: ảnh gốc nằm trong `photos/` với tên theo vị trí trên trang (`cover.jpg`, `city-1.jpg`, `gift-groom.jpg`, `gallery-1.jpg`…). Thư mục này không được đưa lên mạng.
+   Muốn đổi ảnh: thay file trong `photos/` (giữ nguyên tên), rồi chạy:
    ```bash
-   python3 tools/photos.py sheet photos/                 # tạo bảng ảnh thu nhỏ có đánh số để chọn
-   python3 tools/photos.py place cover photos/IMG_0412.jpg
+   ./tools/rebuild_photos.sh        # tạo lại toàn bộ ảnh web trong assets/photos/
    ```
-   Các vị trí ảnh: `cover`, `city-1`, `city-2`, `forest-1`, `forest-2`, `wide`, `date`, `closing`, `gift-groom`, `gift-bride`, `gallery-1…6`.
-   Mỗi ảnh được chỉnh màu phim nhẹ cho đồng bộ (`--no-grade` để giữ màu gốc). Vị trí cắt ảnh chỉnh bằng `pos` trong config.
+   Mỗi ảnh được chỉnh màu phim nhẹ cho đồng bộ. Vị trí cắt ảnh chỉnh bằng `pos` trong config; xoay / phóng to ghi trong `tools/rebuild_photos.sh`.
+   Chọn ảnh từ một thư mục lớn: `python3 tools/photos.py sheet <thư-mục>` tạo bảng ảnh thu nhỏ có đánh số.
 3. **Mã QR**: `python3 tools/photos.py qr groom ~/Downloads/qr.png` (cô dâu thì thay `groom` bằng `bride`).
-4. **Nhạc nền**: chép file mp3 vào `assets/music/song.mp3`.
+4. **Nhạc nền**: `assets/music/song.mp3` (bản gốc chất lượng cao giữ ở `song-original.mp3`, không đưa lên mạng).
 5. **Ảnh xem trước khi chia sẻ**: sau khi đưa trang lên mạng, đổi `og:image` trong `index.html` thành đường dẫn đầy đủ tới `assets/photos/share.jpg`.
 
 ## Xem thử

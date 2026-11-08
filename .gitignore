@@ -1,6 +1,5 @@
 .DS_Store
 __pycache__/
-# raw originals stay local; only processed copies in assets/photos are published
-photos/
-CITY VIBE/
-FALL CONCEPT/
+# originals stay local — only the processed web copies in assets/ are published
+/photos/
+/song-original.mp3
