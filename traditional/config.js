@@ -49,16 +49,15 @@ window.WEDDING = {
     /* Album. The layout repeats every 6 photos: [tall, WIDE] [tall, tall, tall] [PANORAMA],
        so horizontal shots work best in positions 2, 6 and 8; leftover photos fill the last row. */
     gallery: [
-      "../assets/photos/gallery-1.webp",                           // 1  under the veil
+      "../assets/photos/gallery-7.webp",                           // 1  veil walk (HY704916)
       { src: "../assets/photos/gallery-10.webp", pos: "35% 60%" }, // 2  wine bar, toast    (wide)
       "../assets/photos/gallery-8.webp",                           // 3  Osgoode courtyard
       "../assets/photos/gallery-9.webp",                           // 4  City Hall twirl
       { src: "../assets/photos/gallery-12.webp", pos: "50% 65%" }, // 5  Osgoode walk
       { src: "../assets/photos/gallery-6.webp",  pos: "50% 60%" }, // 6  City Hall ramp    (panorama)
-      "../assets/photos/gallery-7.webp",                           // 7  veil walk
+      "../assets/photos/gallery-14.webp",                          // 7  bouquet & shoes in the sky
       { src: "../assets/photos/gallery-5.webp",  pos: "50% 60%" }, // 8  throwing leaves   (wide)
-      { src: "../assets/photos/gallery-15.webp", pos: "50% 70%" }, // 9  maple road
-      "../assets/photos/gallery-14.webp"                           // 10 bouquet & shoes in the sky
+      { src: "../assets/photos/gallery-15.webp", pos: "50% 72%" }  // 9  maple road        (panorama, last row)
     ]
   },
 

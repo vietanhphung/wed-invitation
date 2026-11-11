@@ -180,7 +180,7 @@ function setupCover() {
       document.documentElement.classList.remove('locked');
       scrollTo(0, 0);
       setupReveal();
-    }, reduce ? 0 : 1500);
+    }, reduce ? 0 : 1750);
   }, { once: false });
 }
 

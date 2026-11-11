@@ -39,7 +39,7 @@ window.WEDDING = {
     groom: "../assets/photos/gift-groom.webp",
     bride: "../assets/photos/gift-bride.webp",
     album: [
-      "../assets/photos/gallery-1.webp", "../assets/photos/gallery-3.webp",
+      "../assets/photos/gallery-7.webp", "../assets/photos/gallery-3.webp",
       "../assets/photos/gallery-4.webp", "../assets/photos/gallery-5.webp",
       "../assets/photos/city-1.webp", "../assets/photos/date.webp"
     ],

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" preserveAspectRatio="none">
+  <!-- envelope front pocket: V-shaped opening at the top, drawn as a shape (no CSS clip-path) -->
+  <defs>
+    <linearGradient id="f" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3eee2"/><stop offset="1" stop-color="#e8e1d1"/>
+    </linearGradient>
+  </defs>
+  <path d="M0 0L150 112L300 0V200H0Z" fill="url(#f)"/>
+  <path d="M0 0L150 112L300 0" fill="none" stroke="#cbbfa6" stroke-width="1" vector-effect="non-scaling-stroke"/>
+  <path d="M0 200L150 112L300 200" fill="none" stroke="#786450" stroke-opacity=".18" stroke-width="1" vector-effect="non-scaling-stroke"/>
+</svg>
