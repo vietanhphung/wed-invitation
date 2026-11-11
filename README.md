@@ -18,6 +18,12 @@ cưới, album ảnh, địa điểm, mã QR mừng cưới và nhạc nền.
 4. **Nhạc nền**: `assets/music/song.mp3` (bản gốc chất lượng cao giữ ở `song-original.mp3`, không đưa lên mạng).
 5. **Ảnh xem trước khi chia sẻ**: sau khi đưa trang lên mạng, đổi `og:image` trong `index.html` thành đường dẫn đầy đủ tới `assets/photos/share.jpg`.
 
+## Link riêng cho từng khách
+
+Thêm `?name=` vào cuối link, ví dụ `https://<user>.github.io/<repo>/?name=anh Tuấn và chị Lan`.
+Màn hình mở thiệp sẽ hiện **"Thân mời anh Tuấn và chị Lan"**, và chữ "bạn" trong lời mời / phần mừng cưới được thay bằng tên khách.
+Không có `?name=` thì thiệp hiển thị như bình thường. (Nếu tên có dấu `&`, `#` hoặc `?`, hãy thay bằng `%26`, `%23`, `%3F`.)
+
 ## Xem thử
 
 Mở trực tiếp `index.html`, hoặc chạy `python3 -m http.server` rồi vào http://localhost:8000.

@@ -76,6 +76,9 @@ html.locked,html.locked body{overflow:hidden;overscroll-behavior:none}
 .intro-names em{display:block;margin:.08em 0;font-size:.55em;color:var(--maple)}
 .intro-date{margin:0;font:400 .78rem/1 var(--sans);letter-spacing:.4em;color:var(--ink-soft)}
 .intro .btn{margin-top:12px}
+.intro-guest{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:18px}
+.intro-guest[hidden]{display:none}
+.guest-name{margin:0;max-width:min(90vw,640px);font:italic 400 clamp(1.6rem,4.4vw,2.4rem)/1.2 var(--serif);color:var(--maple);overflow-wrap:anywhere;text-wrap:balance}
 
 /* ---------- Generic section + reveal ---------- */
 .section{position:relative}

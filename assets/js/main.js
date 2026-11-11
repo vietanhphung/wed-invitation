@@ -11,6 +11,10 @@ const [Y, M, D] = W.date.split('-').map(Number);
 const due = new Date(`${W.date}T${W.time}:00${W.utcOffset || '+07:00'}`);
 const lastWord = s => s.trim().split(/\s+/).pop();
 
+/* Personal links: …/?name=anh%20Tuấn → "Thân mời anh Tuấn". Only ever set via textContent. */
+const guestName = (new URLSearchParams(location.search).get('name') || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+const guest = guestName || 'bạn';
+
 /* ---------- Text bindings ---------- */
 const bindings = {
   groom: W.groom,
@@ -25,11 +29,13 @@ const bindings = {
   calTitle: `Tháng ${M} · ${Y}`,
   time: `${W.time} giờ`,
   lunar: W.lunar || '',
-  invite: W.invite
+  invite: W.invite.replace(/\{guest\}/g, guest),
+  guest
 };
 function bindText() {
   $$('[data-bind]').forEach(el => { if (el.dataset.bind in bindings) el.textContent = bindings[el.dataset.bind]; });
-  document.title = `Thiệp cưới | ${W.groom} & ${W.bride}`;
+  $('#intro-guest').hidden = !guestName;
+  document.title = (guestName ? `Thân mời ${guestName} | ` : 'Thiệp cưới | ') + `${W.groom} & ${W.bride}`;
 }
 
 /* ---------- Photos ---------- */

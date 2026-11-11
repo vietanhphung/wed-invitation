@@ -25,6 +25,11 @@
 <!-- COVER SCREEN -->
 <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="Mở thiệp cưới">
   <div class="intro-inner">
+    <!-- shown only when the link has ?name=... -->
+    <div class="intro-guest" id="intro-guest" hidden>
+      <p class="mono">Thân mời</p>
+      <p class="guest-name" data-bind="guest"></p>
+    </div>
     <p class="kicker">Lễ thành hôn</p>
     <h1 class="intro-names"><span data-bind="groom"></span><em>&amp;</em><span data-bind="bride"></span></h1>
     <span class="rule" aria-hidden="true"></span>
@@ -131,7 +136,7 @@
     <div class="section-head rise">
       <p class="kicker">Mừng cưới</p>
       <h2 class="title">Hộp quà <em>yêu thương</em></h2>
-      <p class="gift-intro">Sự hiện diện và lời chúc của bạn đã là món quà quý giá nhất. Nếu muốn gửi lời chúc từ xa, bạn có thể dùng thông tin bên dưới.</p>
+      <p class="gift-intro">Sự hiện diện và lời chúc của <span data-bind="guest">bạn</span> đã là món quà quý giá nhất. Nếu muốn gửi lời chúc từ xa, <span data-bind="guest">bạn</span> có thể dùng thông tin bên dưới.</p>
     </div>
     <div class="gift-grid rise d2" id="gift-grid"></div>
   </section>
