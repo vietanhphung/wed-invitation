@@ -8,7 +8,7 @@
   python3 tools/photos.py qr groom ~/Downloads/qr.png
   python3 tools/photos.py placeholders
 
-Slots: share, cover, city-1, city-2, forest-1, forest-2, wide, date, closing, gift-groom, gift-bride, gallery-1..N
+Slots: share, hero, cover, city-1, city-2, forest-1, forest-2, wide, date, closing, gift-groom, gift-bride, gallery-1..N
 Every photo gets the same soft film grade (lifted blacks, warm highlights, slightly
 muted colour) so pictures from different cameras sit together.
 The `share` slot writes share.jpg (1200x630), the link preview for Zalo / Facebook.
@@ -30,8 +30,8 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "assets" / "photos"
 QR = ROOT / "assets" / "qr"
 EXTS = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif", ".tif", ".tiff"}
-SLOT_RE = re.compile(r"^(share|cover|city-[12]|forest-[12]|wide|date|closing|gift-groom|gift-bride|gallery-\d+)$")
-LONG_SIDE = {"wide": 2400, "closing": 2400, "cover": 2000}
+SLOT_RE = re.compile(r"^(share|hero|cover|city-[12]|forest-[12]|wide|date|closing|gift-groom|gift-bride|gallery-\d+)$")
+LONG_SIDE = {"wide": 2400, "closing": 2400, "cover": 2000, "hero": 2400}
 
 
 def load(path, draft=None):
@@ -76,7 +76,7 @@ def straighten(img, degrees):
 
 def place(slot, src, grade=True, crop=None, rotate=0.0):
     if not SLOT_RE.match(slot):
-        sys.exit(f"unknown slot '{slot}'. Slots: share, cover, city-1, city-2, forest-1, forest-2, wide, date, closing, gift-groom, gift-bride, gallery-N")
+        sys.exit(f"unknown slot '{slot}'. Slots: share, hero, cover, city-1, city-2, forest-1, forest-2, wide, date, closing, gift-groom, gift-bride, gallery-N")
     img = load(src)
     if rotate:
         img = straighten(img, rotate)

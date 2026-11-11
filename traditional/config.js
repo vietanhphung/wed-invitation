@@ -37,7 +37,7 @@ window.WEDDING = {
      point used when cropping, e.g. "50% 30%" (lower 2nd number = show more top).
      Originals live in photos/<same name>.jpg; rebuild with tools/rebuild_photos.sh */
   photos: {
-    cover:   { src: "../assets/photos/cover.webp",   pos: "50% 45%" },
+    cover:   { src: "../assets/photos/hero.webp",    pos: "33% 50%" },   // first section (HY704980, under the veil)
     city:    ["../assets/photos/city-1.webp", "../assets/photos/city-2.webp"],
     forest:  ["../assets/photos/forest-1.webp", "../assets/photos/forest-2.webp"],
     wide:    { src: "../assets/photos/wide.webp",    pos: "50% 62%" },
@@ -46,13 +46,23 @@ window.WEDDING = {
     // gift cards (tall arch frames)
     giftGroom: { src: "../assets/photos/gift-groom.webp", pos: "50% 50%" },
     giftBride: { src: "../assets/photos/gift-bride.webp", pos: "50% 50%" },
+    /* Album. The layout repeats every 6 photos: [tall, WIDE] [tall, tall, tall] [PANORAMA],
+       so horizontal shots work best in positions 2, 6, 8, 12, 14. */
     gallery: [
-      "../assets/photos/gallery-1.webp",                          // under the veil
-      { src: "../assets/photos/gallery-2.webp", pos: "30% 60%" }, // wine bar
-      "../assets/photos/gallery-3.webp",                          // forest kiss
-      "../assets/photos/gallery-4.webp",                          // close-up
-      "../assets/photos/gallery-5.webp",                          // throwing leaves
-      { src: "../assets/photos/gallery-6.webp", pos: "50% 60%" }  // City Hall ramp
+      "../assets/photos/gallery-1.webp",                           // 1  under the veil
+      { src: "../assets/photos/gallery-2.webp",  pos: "30% 60%" }, // 2  wine bar          (wide)
+      "../assets/photos/gallery-8.webp",                           // 3  Osgoode courtyard
+      "../assets/photos/gallery-4.webp",                           // 4  close-up
+      "../assets/photos/gallery-9.webp",                           // 5  City Hall twirl
+      { src: "../assets/photos/gallery-13.webp", pos: "50% 55%" }, // 6  streetcar tracks   (panorama)
+      "../assets/photos/gallery-7.webp",                           // 7  veil walk
+      { src: "../assets/photos/gallery-10.webp", pos: "35% 60%" }, // 8  wine bar, toast    (wide)
+      { src: "../assets/photos/gallery-12.webp", pos: "50% 65%" }, // 9  Osgoode walk
+      { src: "../assets/photos/gallery-15.webp", pos: "50% 65%" }, // 10 maple road
+      { src: "../assets/photos/gallery-11.webp", pos: "50% 60%" }, // 11 through the door
+      { src: "../assets/photos/gallery-6.webp",  pos: "50% 60%" }, // 12 City Hall ramp    (panorama)
+      "../assets/photos/gallery-14.webp",                          // 13 bouquet & shoes in the sky
+      { src: "../assets/photos/gallery-5.webp",  pos: "50% 60%" }  // 14 throwing leaves   (wide)
     ]
   },
 

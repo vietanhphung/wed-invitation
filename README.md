@@ -67,3 +67,7 @@ Chạy `python3 -m http.server` ở thư mục này rồi vào http://localhost:
 git add -A && git commit -m "…" && git push
 ```
 GitHub Pages tự cập nhật sau khoảng 1 phút.
+
+Mỗi lần commit, `tools/stamp_version.sh` tự gắn `?v=<thời gian>` vào `style.css` / `config.js` / `main.js` của cả hai trang,
+để trình duyệt của khách không dùng lẫn file cũ (đã lưu cache) với file mới — lỗi khiến thiệp không mở được.
+Nếu clone repo sang máy khác, chạy một lần: `./tools/install_hooks.sh`.

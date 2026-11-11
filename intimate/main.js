@@ -38,9 +38,13 @@ function bindText() {
   document.title = (guestName ? `Thân mời ${guestName} | ` : 'Thiệp mời | ') + `${W.groomShort} & ${W.brideShort}`;
 }
 function bindPhotos() {
+  // each entry is a path, or { src, pos } where pos is the crop focal point ("x% y%")
   $$('img[data-photo]').forEach(img => {
-    const src = W.photos[img.dataset.photo];
-    if (src) img.src = src; else (img.closest('figure, .polaroid, .thanks') || img).remove();
+    const entry = W.photos[img.dataset.photo];
+    const src = typeof entry === 'string' ? entry : entry && entry.src;
+    if (!src) { (img.closest('figure, .polaroid, .thanks') || img).remove(); return; }
+    img.src = src;
+    if (entry.pos) img.style.objectPosition = entry.pos;
   });
 }
 

@@ -43,7 +43,7 @@ window.WEDDING = {
       "../assets/photos/gallery-4.webp", "../assets/photos/gallery-5.webp",
       "../assets/photos/city-1.webp", "../assets/photos/date.webp"
     ],
-    thanks: "../assets/photos/closing.webp"
+    thanks: { src: "../assets/photos/closing.webp", pos: "47% 50%" }   // pos centres the couple on narrow screens
   },
 
   music: "../assets/music/song.mp3",
