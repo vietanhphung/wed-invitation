@@ -9,33 +9,27 @@ window.WEDDING = {
   brideShort: "Hương Giang",
 
   // Guests see "Thân mời <name>" from links like …/intimate/?name=anh%20Tuấn
-  defaultGuest: "Quý vị & Gia đình",
+  defaultGuest: "Bạn và Gia đình",       // shown on the cover / invitation when there's no name
+  defaultGuestInText: "bạn và gia đình", // used inside sentences (thank-you message)
 
-  date: "2026-12-16",              // YYYY-MM-DD — update if the intimate dinner is on another day
-  time: "18:00",                   // HH:mm, 24h — placeholder
+  date: "2026-12-12",              // YYYY-MM-DD
+  time: "15:00",                   // HH:mm, 24h
   utcOffset: "+07:00",
-  lunar: "Nhằm ngày 08 tháng 11 năm Bính Ngọ",
-
-  parents: {
-    groom: ["Ông Phùng …", "Bà …"],  // placeholders
-    bride: ["Ông Đinh …", "Bà …"]
-  },
+  lunar: "Nhằm ngày 04 tháng 11 năm Bính Ngọ",
 
   event: {
     title: "Tiệc cưới thân mật",
-    venue: "Trung tâm Tiệc cưới & Hội nghị Mipec Palace",
-    hall: "Sảnh 2",
-    address: "229 Tây Sơn, phường Kim Liên, Hà Nội",
-    mapsUrl: "https://www.google.com/maps/search/?api=1&query=Mipec+Palace+229+T%C3%A2y+S%C6%A1n+Kim+Li%C3%AAn+H%C3%A0+N%E1%BB%99i"
+    venue: "The Black and White Villa",
+    hall: "",                        // optional, e.g. a room or garden name
+    address: "Center Road, Tam Đảo, Phú Thọ",
+    mapsUrl: "https://www.google.com/maps?q=The+Black+and+White+Villa,+Center+Road,+Tam+%C4%90%E1%BA%A3o,+Ph%C3%BA+Th%E1%BB%8D&ftid=0x3134e72bbeffc693:0x38469b5a6fb5c19c"
   },
 
-  // Program of the evening (placeholders — edit freely, add or remove rows)
+  // Program of the day (add or remove rows freely)
   schedule: [
-    ["17:30", "Đón khách"],
-    ["18:00", "Lễ thành hôn"],
-    ["18:30", "Dùng tiệc"],
-    ["19:30", "Chia sẻ & nâng ly"],
-    ["20:30", "Chụp ảnh kỷ niệm"]
+    ["11:00 – 13:00", "Lên xe đoàn"],
+    ["15:00", "Lễ thành hôn"],
+    ["18:00", "Dùng tiệc"]
   ],
   dressCode: ["#ffffff", "#d8cbbb", "#6b1526"],   // "" or [] to hide
 
@@ -51,19 +45,6 @@ window.WEDDING = {
     ],
     thanks: "../assets/photos/closing.webp"
   },
-
-  /* RSVP. Leave endpoint "" to send replies by Zalo instead: the reply text is
-     copied and Zalo opens for `zalo` (a phone number). To collect replies in a
-     Google Sheet, paste your Apps Script web-app URL — see README. */
-  rsvp: {
-    endpoint: "",
-    zalo: ""                        // e.g. "0912345678"
-  },
-
-  banks: [
-    { who: "groom", name: "Vietcombank", number: "0000000000", owner: "NGUYEN VAN A", qr: "../assets/qr/groom.webp" },
-    { who: "bride", name: "Techcombank", number: "0000000000", owner: "TRAN THI B",  qr: "../assets/qr/bride.webp" }
-  ],
 
   music: "../assets/music/song.mp3",
   musicTitle: "小幸運 · A Little Happiness (Piano)"

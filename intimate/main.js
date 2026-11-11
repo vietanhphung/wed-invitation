@@ -18,7 +18,7 @@ const guest = guestName || W.defaultGuest;
 /* ---------- text ---------- */
 const bindings = {
   guest,
-  guestLower: guestName || 'quý vị',
+  guestLower: guestName || W.defaultGuestInText,
   groomShort: W.groomShort, brideShort: W.brideShort,
   seal: initial(W.groom) + initial(W.bride),
   initialG: initial(W.groom), initialB: initial(W.bride),
@@ -36,8 +36,6 @@ function bindText() {
   $$('[data-bind]').forEach(el => { if (el.dataset.bind in bindings) el.textContent = bindings[el.dataset.bind]; });
   $$('[data-bind="hall"], [data-bind="lunarCaps"]').forEach(el => { if (!el.textContent) el.remove(); });
   document.title = (guestName ? `Thân mời ${guestName} | ` : 'Thiệp mời | ') + `${W.groomShort} & ${W.brideShort}`;
-  $('#parents-groom').append(...W.parents.groom.flatMap((n, i) => i ? [make('br'), n] : [n]));
-  $('#parents-bride').append(...W.parents.bride.flatMap((n, i) => i ? [make('br'), n] : [n]));
 }
 function bindPhotos() {
   $$('img[data-photo]').forEach(img => {
@@ -124,86 +122,6 @@ function closeModals() {
   vReturn = null;
 }
 
-/* ---------- gifts ---------- */
-const giftLabel = b => b.who === 'bride' ? 'Nhà gái' : 'Nhà trai';
-function showBank(i) {
-  const bank = W.banks[i];
-  $$('#gift-tabs button').forEach((t, j) => t.setAttribute('aria-selected', String(i === j)));
-  const body = $('#gift-body');
-  body.innerHTML = '';
-  if (bank.qr) {
-    const img = make('img', { className: 'qr', src: bank.qr, alt: 'Mã QR chuyển khoản' });
-    img.onerror = () => img.remove();
-    body.appendChild(img);
-  }
-  body.append(
-    make('p', { className: 'bank-name', textContent: bank.name || '—' }),
-    make('p', { className: 'bank-number', textContent: bank.number || '—' }),
-    make('p', { className: 'bank-owner', textContent: bank.owner || '' })
-  );
-  if (bank.number) {
-    const c = make('button', { type: 'button', className: 'pill outline', textContent: 'Sao chép số tài khoản' });
-    c.addEventListener('click', () => copy(bank.number, 'Đã sao chép số tài khoản'));
-    body.appendChild(c);
-  }
-}
-function setupGifts() {
-  const tabs = $('#gift-tabs');
-  W.banks.forEach((b, i) => {
-    const t = make('button', { type: 'button', textContent: giftLabel(b) });
-    t.setAttribute('role', 'tab');
-    t.addEventListener('click', () => showBank(i));
-    tabs.appendChild(t);
-  });
-  $('#gift-btn').addEventListener('click', () => { showBank(0); openModal('#gift-modal'); });
-}
-
-/* ---------- RSVP ---------- */
-function setupRsvp() {
-  const form = $('#rsvp-form'), count = $('#guests'), out = $('#guests-out');
-  if (guestName) $('#rsvp-name').value = guestName;
-  $$('[data-step]', form).forEach(b => b.addEventListener('click', () => {
-    const n = Math.min(10, Math.max(1, Number(count.value) + Number(b.dataset.step)));
-    count.value = n; out.textContent = n;
-  }));
-  form.addEventListener('change', () => { $('#guests-field').hidden = form.attend.value !== 'Có'; });
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
-    const data = new FormData(form);
-    if (data.get('attend') !== 'Có') data.set('guests', '0');
-    data.set('submitted', new Date().toISOString());
-    const done = $('#rsvp-done');
-    const thanks = data.get('attend') === 'Có'
-      ? 'Cảm ơn bạn! Hẹn gặp bạn trong ngày vui của chúng mình.'
-      : 'Cảm ơn bạn đã báo cho chúng mình biết. Mong sớm gặp lại bạn!';
-    if (W.rsvp.endpoint) {
-      // Google Apps Script / Formspree: fire-and-forget form post
-      try { await fetch(W.rsvp.endpoint, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' }); }
-      catch { toast('Không gửi được, vui lòng thử lại.'); return; }
-      form.querySelector('[type=submit]').disabled = true;
-      done.textContent = thanks; done.hidden = false;
-      return;
-    }
-    // no endpoint: hand the reply over by Zalo
-    const msg = `Xác nhận tham dự — ${data.get('name')} (khách ${data.get('side')}): ${data.get('attend') === 'Có' ? `có, ${data.get('guests')} người` : 'không tham dự được'}.${data.get('message') ? ' Lời chúc: ' + data.get('message') : ''}`;
-    await copy(msg, W.rsvp.zalo ? 'Đã sao chép lời nhắn — dán vào Zalo để gửi cho chúng mình nhé' : 'Đã sao chép lời nhắn xác nhận');
-    if (W.rsvp.zalo) window.open('https://zalo.me/' + encodeURIComponent(W.rsvp.zalo.replace(/\D/g, '')), '_blank', 'noopener');
-    done.textContent = thanks; done.hidden = false;
-  });
-}
-
-/* ---------- small helpers ---------- */
-async function copy(text, note) {
-  try { await navigator.clipboard.writeText(text); }
-  catch { const a = make('textarea', { value: text }); document.body.append(a); a.select(); document.execCommand('copy'); a.remove(); }
-  toast(note);
-}
-let toastTimer;
-function toast(t) {
-  const el = $('#toast'); el.textContent = t; el.classList.add('show');
-  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
-}
-
 /* ---------- music ---------- */
 const audio = $('#bg-music'), musicBtn = $('#music-btn');
 function setMusic(on) {
@@ -287,8 +205,6 @@ renderCalendar();
 renderEvent();
 renderSchedule();
 renderAlbum();
-setupGifts();
-setupRsvp();
 setupMusic();
 setupKeys();
 setupCover();

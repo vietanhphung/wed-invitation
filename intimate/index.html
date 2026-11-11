@@ -10,7 +10,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://vietanhphung.com/wed-invitation/intimate/">
 <meta property="og:title" content="Thiệp mời · Việt Anh &amp; Hương Giang">
-<meta property="og:description" content="Tiệc cưới thân mật · Thứ Tư, 16.12.2026 · Mipec Palace, Hà Nội">
+<meta property="og:description" content="Tiệc cưới thân mật · Thứ Bảy, 12.12.2026 · The Black and White Villa, Tam Đảo">
 <meta property="og:image" content="https://vietanhphung.com/wed-invitation/assets/photos/share.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -86,11 +86,6 @@
         <figcaption><span class="script">Cô dâu</span><span class="serif-caps" data-bind="brideShort"></span></figcaption>
       </figure>
     </div>
-
-    <div class="parents reveal">
-      <div><p class="label dark strong">Nhà trai</p><p class="caps" id="parents-groom"></p></div>
-      <div><p class="label dark strong">Nhà gái</p><p class="caps" id="parents-bride"></p></div>
-    </div>
   </section>
 
   <!-- EVENT -->
@@ -124,39 +119,7 @@
   <!-- ALBUM -->
   <section class="sec album">
     <h2 class="script-head reveal"><span>Album Hình Cưới</span><i></i></h2>
-    <p class="caps intro-text reveal">Những khung hình nhỏ giữ lại hành trình của chúng tôi — từ ánh mắt đầu tiên đến ngày cùng nhau về chung một nhà.</p>
     <div class="album-grid" id="album"></div>
-  </section>
-
-  <!-- RSVP -->
-  <section class="sec rsvp" id="rsvp">
-    <h2 class="script-head reveal"><span>Xác Nhận Tham Dự</span><i></i></h2>
-    <p class="caps intro-text reveal">Vì là buổi tiệc nhỏ và ấm cúng, sự có mặt của <span data-bind="guestLower"></span> là niềm vui lớn của gia đình chúng tôi. Xin dành chút thời gian xác nhận để chúng tôi chuẩn bị đón tiếp thật chu đáo.</p>
-    <form class="card rsvp-form reveal" id="rsvp-form">
-      <label class="field"><span class="label dark">Tên của bạn</span><input name="name" id="rsvp-name" autocomplete="name" required maxlength="80"></label>
-      <fieldset class="field"><legend class="label dark">Bạn là khách của</legend>
-        <div class="seg"><label><input type="radio" name="side" value="Nhà trai" checked><span>Nhà trai</span></label><label><input type="radio" name="side" value="Nhà gái"><span>Nhà gái</span></label></div>
-      </fieldset>
-      <fieldset class="field"><legend class="label dark">Bạn có tham dự không?</legend>
-        <div class="seg"><label><input type="radio" name="attend" value="Có" checked><span>Có, chắc chắn rồi</span></label><label><input type="radio" name="attend" value="Không"><span>Rất tiếc, mình bận</span></label></div>
-      </fieldset>
-      <div class="field" id="guests-field"><span class="label dark">Số người tham dự <small>(tính cả bạn)</small></span>
-        <div class="stepper"><button type="button" data-step="-1" aria-label="Bớt">−</button><output id="guests-out">1</output><button type="button" data-step="1" aria-label="Thêm">+</button></div>
-        <input type="hidden" name="guests" id="guests" value="1">
-      </div>
-      <label class="field"><span class="label dark">Lời chúc <small>(không bắt buộc)</small></span><textarea name="message" rows="3" maxlength="500"></textarea></label>
-      <button class="pill solid" type="submit">Xác nhận tham dự</button>
-      <p class="rsvp-done" id="rsvp-done" hidden></p>
-    </form>
-  </section>
-
-  <!-- GIFT -->
-  <section class="sec gift">
-    <p class="caps intro-text center reveal">Nếu muốn gửi chút quà mừng, mã QR của hai nhà đã được chuẩn bị sẵn cho bạn.</p>
-    <button class="pill solid reveal" id="gift-btn" type="button">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11h16v10H4zM3 7h18v4H3zM12 7v14M12 7C10 3 6 3 6 5.5S10 7 12 7zm0 0c2-4 6-4 6-1.5S14 7 12 7z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-      Gửi quà mừng cưới
-    </button>
   </section>
 
   <!-- FINAL COUNTDOWN -->
@@ -185,16 +148,6 @@
   </section>
 </main>
 
-<!-- gift modal -->
-<div class="modal" id="gift-modal" role="dialog" aria-modal="true" aria-label="Quà mừng cưới">
-  <div class="modal-sheet">
-    <button class="x" type="button" data-close aria-label="Đóng">×</button>
-    <p class="script modal-title">Quà mừng cưới</p>
-    <div class="seg tabs" id="gift-tabs"></div>
-    <div id="gift-body"></div>
-  </div>
-</div>
-
 <!-- photo viewer -->
 <div class="modal viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Xem ảnh">
   <button class="x" type="button" data-close aria-label="Đóng">×</button>
@@ -207,7 +160,6 @@
 <button class="music" id="music-btn" type="button" aria-label="Bật nhạc nền" aria-pressed="false" hidden>
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="18" r="3" fill="currentColor"/><circle cx="17" cy="16" r="3" fill="currentColor"/></svg>
 </button>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="config.js"></script>
 <script src="main.js"></script>

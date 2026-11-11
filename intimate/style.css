@@ -132,8 +132,6 @@ main{position:relative;width:min(560px,100%);margin:0 auto;background:var(--pape
 .lines{margin-top:16px;line-height:1.7}
 .couple{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:40px 0 34px}
 .couple .polaroid img{aspect-ratio:3/4}
-.parents{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.parents .caps{margin-top:8px;line-height:1.9}
 
 /* ---------- event ---------- */
 .event{padding-top:20px}
@@ -151,9 +149,9 @@ main{position:relative;width:min(560px,100%);margin:0 auto;background:var(--pape
 
 /* ---------- schedule ---------- */
 .timeline{margin:0;padding:8px 18px;list-style:none}
-.timeline li{display:grid;grid-template-columns:62px 14px 1fr;align-items:center;gap:8px;padding:13px 0;border-bottom:1px dashed var(--line)}
+.timeline li{display:grid;grid-template-columns:7.2em 14px 1fr;align-items:center;gap:8px;padding:13px 0;border-bottom:1px dashed var(--line)}
 .timeline li:last-child{border-bottom:0}
-.timeline time{font:500 1.25rem/1 var(--cond);color:var(--ink)}
+.timeline time{font:500 1.2rem/1 var(--cond);color:var(--ink);white-space:nowrap}
 .timeline i{width:8px;height:8px;border-radius:50%;background:var(--wine)}
 .timeline span{font:400 1.02rem/1.3 var(--cond);letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft)}
 .dress{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:22px}
@@ -168,26 +166,7 @@ main{position:relative;width:min(560px,100%);margin:0 auto;background:var(--pape
 .album-grid button:nth-child(odd).in{transform:rotate(-1deg)}
 .album-grid button:nth-child(even).in{transform:rotate(1deg)}
 
-/* ---------- rsvp ---------- */
-.rsvp-form{display:grid;gap:18px;padding:22px 18px 24px}
-.field{display:grid;gap:8px;margin:0;padding:0;border:0;min-width:0}
-.field legend{padding:0;margin-bottom:8px}
-.field input:not([type=radio]),.field textarea{width:100%;padding:12px 14px;border:1px solid var(--edge);border-radius:10px;background:#fff;font:400 1rem/1.4 var(--serif)}
-.field textarea{resize:vertical}
-.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.seg label{position:relative}
-.seg input{position:absolute;opacity:0;pointer-events:none}
-.seg span{display:flex;align-items:center;justify-content:center;min-height:42px;padding:6px 10px;border:1.5px solid var(--ink-soft);border-radius:999px;font:400 .9rem/1.2 var(--cond);letter-spacing:.08em;text-transform:uppercase;text-align:center;cursor:pointer;transition:background .2s,color .2s}
-.seg input:checked + span{background:#1f1a19;border-color:#1f1a19;color:#fff}
-.seg input:focus-visible + span{outline:2px solid var(--wine);outline-offset:2px}
-.stepper{display:flex;align-items:center;width:max-content;border:1px solid var(--edge);border-radius:999px;background:#fff}
-.stepper button{width:44px;height:42px;border:0;background:none;font-size:1.3rem}
-.stepper output{min-width:36px;text-align:center;font:500 1.2rem/1 var(--cond)}
-.rsvp-form .pill{justify-self:center}
-.rsvp-done{margin:0;text-align:center;font:italic 400 1rem/1.5 var(--serif);color:var(--wine)}
 
-/* ---------- gift ---------- */
-.gift{display:flex;flex-direction:column;align-items:center;padding-top:10px}
 
 /* ---------- final countdown ---------- */
 .final{padding-top:30px}
@@ -206,23 +185,13 @@ main{position:relative;width:min(560px,100%);margin:0 auto;background:var(--pape
 /* ---------- thank you ---------- */
 .thanks{position:relative}
 .thanks img{width:100%;height:min(86svh,720px);object-fit:cover}
-.thanks-band{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);padding:24px 18px;background:rgba(242,241,235,.78);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);text-align:center}
+.thanks-band{position:absolute;left:0;right:0;bottom:0;padding:22px 18px 26px;background:rgba(242,241,235,.78);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);text-align:center}
 .thanks-band .script{font-size:2.3rem;color:var(--ink-soft)}
 .thanks-band .caps{margin-top:6px;color:var(--ink)}
 
 /* ---------- modals ---------- */
 .modal{position:fixed;inset:0;z-index:650;display:grid;place-items:center;padding:18px;background:rgba(31,26,25,.5);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
 .modal.show{opacity:1;visibility:visible}
-.modal-sheet{position:relative;width:min(380px,100%);max-height:calc(100svh - 36px);overflow:auto;padding:30px 20px 24px;border-radius:18px;background:var(--paper-2);text-align:center;transform:translateY(14px);transition:transform .4s var(--ease)}
-.modal.show .modal-sheet{transform:none}
-.modal-title{font-size:2.2rem;margin-bottom:14px}
-.tabs{margin-bottom:18px}
-.tabs button{min-height:40px;border:1.5px solid var(--ink-soft);border-radius:999px;background:transparent;font:400 .9rem/1 var(--cond);letter-spacing:.1em;text-transform:uppercase}
-.tabs button[aria-selected="true"]{background:#1f1a19;border-color:#1f1a19;color:#fff}
-.qr{width:min(220px,62vw);margin:0 auto 14px;border-radius:10px;background:#fff;box-shadow:var(--shadow)}
-.bank-name{margin:0;font:400 .9rem/1.4 var(--cond);letter-spacing:.18em;text-transform:uppercase;color:var(--wine)}
-.bank-number{margin:6px 0 2px;font:500 1.6rem/1.2 var(--cond);letter-spacing:.06em}
-.bank-owner{margin:0 0 16px;font:400 .95rem/1.4 var(--cond);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .x{position:absolute;top:10px;right:10px;z-index:2;width:38px;height:38px;border:1px solid var(--edge);border-radius:50%;background:var(--paper-2);font-size:1.3rem;line-height:1}
 .viewer{padding:48px 8px;background:rgba(242,241,235,.97)}
 .viewer img{max-width:100%;max-height:calc(100svh - 110px);object-fit:contain;box-shadow:var(--shadow)}
@@ -231,15 +200,13 @@ main{position:relative;width:min(560px,100%);margin:0 auto;background:var(--pape
 .nav.prev{left:calc(50% - 56px)}
 .nav.next{right:calc(50% - 56px)}
 
-/* ---------- music + toast ---------- */
+/* ---------- music ---------- */
 .music{position:fixed;right:16px;bottom:16px;z-index:80;display:grid;place-items:center;width:46px;height:46px;border:0;border-radius:50%;background:var(--wine);color:#fff;box-shadow:0 6px 16px rgba(60,10,20,.35)}
 .music[hidden]{display:none}
 .music svg{width:20px;height:20px}
 .music.playing svg{animation:spin 6s linear infinite}
 .music:not(.playing){background:#8b7f7a}
 @keyframes spin{to{transform:rotate(360deg)}}
-.toast{position:fixed;left:50%;bottom:24px;z-index:700;max-width:min(420px,calc(100vw - 32px));padding:12px 18px;border-radius:10px;background:#1f1a19;color:#fff;font:400 .95rem/1.4 var(--cond);letter-spacing:.04em;text-align:center;opacity:0;transform:translate(-50%,20px);pointer-events:none;transition:opacity .25s,transform .25s}
-.toast.show{opacity:1;transform:translate(-50%,0)}
 
 @media (max-width:380px){
   .countdown.boxes{grid-template-columns:repeat(4,64px);gap:8px}
