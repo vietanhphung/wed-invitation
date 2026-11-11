@@ -12,7 +12,7 @@ place city-2     photos/city-2.jpg       # HYC08193
 place forest-1   photos/forest-1.jpg     # HYC09320
 place forest-2   photos/forest-2.jpg     # HYC09682
 place wide       photos/wide.jpg         # HYC09520
-place date       photos/date.jpg         # HYC09739
+place date       photos/date.jpg         # HYC09743 (was HYC09739, kept as photos/HYC09739.jpg)
 place closing    photos/closing.jpg      # HYC08872
 place gift-groom photos/gift-groom.jpg --rotate -6                  # HYC08090_(2), straightened
 place gift-bride photos/gift-bride.jpg --crop 0.19,0.375,0.81,1     # HY705592, zoomed to match the groom
