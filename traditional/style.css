@@ -161,6 +161,12 @@ html.locked,html.locked body{overflow:hidden;overscroll-behavior:none}
 .g-item:nth-child(6n+4){grid-column:span 4;aspect-ratio:3/4}
 .g-item:nth-child(6n+5){grid-column:span 4;aspect-ratio:3/4}
 .g-item:nth-child(6n+6){grid-column:span 12;aspect-ratio:21/9}
+/* incomplete last group: leftover photos fill the row instead of leaving a gap */
+@media (min-width:961px){
+  .g-item:nth-child(6n+3):last-child{grid-column:span 12;aspect-ratio:21/9}
+  .g-item:nth-child(6n+3):nth-last-child(2),.g-item:nth-child(6n+4):last-child{grid-column:span 6;aspect-ratio:1/1}
+  .g-item:nth-child(6n+1):last-child{grid-column:4/span 6}
+}
 
 .lightbox{position:fixed;inset:0;z-index:650;display:grid;place-items:center;padding:56px 64px;background:rgba(251,249,246,.97);opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
 .lightbox.show{opacity:1;visibility:visible}
@@ -265,6 +271,7 @@ html.locked,html.locked body{overflow:hidden;overscroll-behavior:none}
   .gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .g-item:nth-child(n){grid-column:span 1;aspect-ratio:3/4}
   .g-item:nth-child(3n+3){grid-column:span 2;aspect-ratio:4/3}
+  .g-item:nth-child(3n+1):last-child{grid-column:span 2;aspect-ratio:4/3}
   .lightbox{padding:60px 12px}
   .lb-prev,.lb-next{top:auto;bottom:14px;transform:none}
 
