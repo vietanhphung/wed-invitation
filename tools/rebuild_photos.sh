@@ -22,3 +22,6 @@ place gallery-3  photos/gallery-3.jpg    # HY707511
 place gallery-4  photos/gallery-4.jpg    # HYC08544
 place gallery-5  photos/gallery-5.jpg    # HYC09401
 place gallery-6  photos/gallery-6.jpg    # HYC08314
+
+# link preview image (Zalo / Messenger / Facebook), 1200x630 — HY705720, cropped to drop the blown-out sky
+if [ -f photos/share.jpg ]; then place share photos/share.jpg --crop 0,0.16,1,0.975; else echo "share      (photos/share.jpg missing — keeping the current preview image)"; fi

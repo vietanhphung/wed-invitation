@@ -2,184 +2,22 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#faf8f4">
-<title>Thiệp cưới</title>
-<meta name="description" content="Trân trọng kính mời bạn đến dự lễ thành hôn của chúng mình.">
-<!-- Social preview (Zalo / Facebook / Messenger). Use absolute URLs once the site is online. -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thiệp cưới | Phùng Việt Anh &amp; Đinh Hương Giang</title>
+<!-- Old links (…/wed-invitation/?name=…) keep working: forward to /traditional/ with the same query. -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="Lễ Thành Hôn">
-<meta property="og:description" content="Trân trọng kính mời bạn đến dự lễ thành hôn của chúng mình.">
-<meta property="og:image" content="assets/photos/share.jpg">
+<meta property="og:url" content="https://vietanhphung.com/wed-invitation/traditional/">
+<meta property="og:title" content="Phùng Việt Anh &amp; Đinh Hương Giang · Lễ Thành Hôn">
+<meta property="og:description" content="Thứ Tư, 16.12.2026 · Mipec Palace, 229 Tây Sơn, Hà Nội">
+<meta property="og:image" content="https://vietanhphung.com/wed-invitation/assets/photos/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500&family=IBM+Plex+Mono:wght@400&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="assets/photos/cover.webp">
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="canonical" href="https://vietanhphung.com/wed-invitation/traditional/">
+<script>location.replace('traditional/' + location.search + location.hash);</script>
+<noscript><meta http-equiv="refresh" content="0; url=traditional/"></noscript>
 </head>
-<body>
-<div id="progress"></div>
-<div class="leaves" id="leaves" aria-hidden="true"></div>
-
-<!-- COVER SCREEN -->
-<div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="Mở thiệp cưới">
-  <div class="intro-inner">
-    <!-- shown only when the link has ?name=... -->
-    <div class="intro-guest" id="intro-guest" hidden>
-      <p class="mono">Thân mời</p>
-      <p class="guest-name" data-bind="guest"></p>
-    </div>
-    <p class="kicker">Lễ thành hôn</p>
-    <h1 class="intro-names"><span data-bind="groom"></span><em>&amp;</em><span data-bind="bride"></span></h1>
-    <span class="rule" aria-hidden="true"></span>
-    <p class="intro-date" data-bind="dateDots"></p>
-    <button class="btn" id="open-btn" type="button">Mở thiệp</button>
-  </div>
-</div>
-
-<header class="site-header" id="header">
-  <div class="topbar">
-    <a class="brand" href="#home" data-bind="monogram"></a>
-    <nav class="toplinks" aria-label="Điều hướng">
-      <a href="#story">Chuyện chúng mình</a><a href="#date">Ngày cưới &amp; địa điểm</a><a href="#gallery">Album</a><a href="#gift">Mừng cưới</a>
-    </nav>
-    <button class="menu-btn" id="menu-btn" type="button" aria-label="Mở menu" aria-expanded="false"><i></i><i></i></button>
-  </div>
-  <nav class="mobile-nav" id="mobile-nav" aria-label="Điều hướng trên điện thoại">
-    <a href="#home">Trang chủ</a><a href="#story">Chuyện chúng mình</a><a href="#date">Ngày cưới &amp; địa điểm</a><a href="#gallery">Album</a><a href="#gift">Mừng cưới</a>
-  </nav>
-</header>
-
-<main>
-  <!-- HERO -->
-  <section class="section hero" id="home">
-    <div class="hero-copy">
-      <p class="kicker rise">The wedding of</p>
-      <h2 class="names rise"><span data-bind="groom"></span><em>&amp;</em><span data-bind="bride"></span></h2>
-      <div class="meta-line rise d2"><span data-bind="weekday"></span><i></i><span data-bind="dateDots"></span><i></i><span data-bind="time"></span></div>
-      <p class="lunar rise d2" data-bind="lunar"></p>
-      <a class="btn hero-btn rise d2" href="#date">Ngày cưới &amp; địa điểm <span aria-hidden="true">↓</span></a>
-    </div>
-    <figure class="film hero-photo rise">
-      <div class="frame"><img data-photo="cover" alt="Ảnh cưới của cô dâu chú rể" fetchpriority="high"></div>
-      <figcaption><span>01</span><span>Algonquin Park, ON</span></figcaption>
-    </figure>
-  </section>
-
-  <!-- INVITE + COUNTDOWN -->
-  <section class="section invite">
-    <p class="invite-text rise" data-bind="invite"></p>
-    <div class="countdown rise d2" aria-label="Đếm ngược ngày cưới">
-      <div><b id="cd-d">--</b><span>Ngày</span></div>
-      <div><b id="cd-h">--</b><span>Giờ</span></div>
-      <div><b id="cd-m">--</b><span>Phút</span></div>
-      <div><b id="cd-s">--</b><span>Giây</span></div>
-    </div>
-  </section>
-
-  <!-- STORY: two chapters, filled from config -->
-  <div id="story"></div>
-  <template id="chapter-tpl">
-    <section class="section chapter">
-      <div class="chapter-photos">
-        <figure class="film big rise"><div class="frame"><img alt=""></div><figcaption><span class="fr"></span><span class="place"></span></figcaption></figure>
-        <figure class="film small rise d2"><div class="frame"><img alt=""></div></figure>
-      </div>
-      <div class="chapter-copy">
-        <p class="kicker rise"><span class="num"></span><i></i><span class="place"></span></p>
-        <h2 class="title rise"></h2>
-        <p class="body rise d2"></p>
-      </div>
-    </section>
-  </template>
-
-  <!-- WIDE PHOTO + QUOTE -->
-  <section class="section wide" aria-label="Lời nhắn">
-    <div class="wide-photo"><img data-photo="wide" alt="Phong cảnh rừng phong mùa thu" loading="lazy"></div>
-    <blockquote class="quote rise"><p id="quote"></p><cite data-bind="couple"></cite></blockquote>
-  </section>
-
-  <!-- SAVE THE DATE + VENUE -->
-  <section class="section date" id="date">
-    <figure class="film date-photo rise">
-      <div class="frame"><img data-photo="date" alt="Ảnh cưới" loading="lazy"></div>
-    </figure>
-    <div class="date-card rise d2">
-      <p class="kicker">Save the date</p>
-      <h2 class="title">Ngày <em>hạnh phúc</em></h2>
-      <span class="ds-week" data-bind="weekday"></span>
-      <span class="ds-day" data-bind="day"></span>
-      <span class="ds-month" data-bind="monthYear"></span>
-      <span class="ds-time">Lúc <span data-bind="time"></span></span>
-      <p class="lunar" data-bind="lunar"></p>
-      <div class="calendar">
-        <div class="cal-title" data-bind="calTitle"></div>
-        <div class="cal-grid" id="cal-grid"></div>
-      </div>
-      <div class="venues" id="venues"></div>
-      <a class="text-link" id="gcal-link" target="_blank" rel="noopener">Thêm vào lịch <span aria-hidden="true">↗</span></a>
-    </div>
-  </section>
-
-  <!-- GALLERY -->
-  <section class="section gallery" id="gallery">
-    <div class="section-head rise">
-      <p class="kicker">Album</p>
-      <h2 class="title">Những <em>khoảnh khắc</em></h2>
-    </div>
-    <div class="gallery-grid" id="gallery-grid"></div>
-  </section>
-
-  <!-- GIFT -->
-  <section class="section gift" id="gift">
-    <div class="section-head rise">
-      <p class="kicker">Mừng cưới</p>
-      <h2 class="title">Hộp quà <em>yêu thương</em></h2>
-      <p class="gift-intro">Sự hiện diện và lời chúc của <span data-bind="guest">bạn</span> đã là món quà quý giá nhất. Nếu muốn gửi lời chúc từ xa, <span data-bind="guest">bạn</span> có thể dùng thông tin bên dưới.</p>
-    </div>
-    <div class="gift-grid rise d2" id="gift-grid"></div>
-  </section>
-
-  <!-- CLOSING -->
-  <section class="section closing">
-    <div class="closing-photo"><img data-photo="closing" alt="Cô dâu chú rể" loading="lazy"></div>
-    <div class="closing-copy rise">
-      <p class="kicker">Thank you</p>
-      <div class="closing-names" data-bind="couple"></div>
-      <p class="mono" data-bind="dateDotsShort"></p>
-    </div>
-  </section>
-</main>
-
-<!-- Lightbox -->
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Xem ảnh">
-  <button class="lb-btn lb-close" id="lb-close" type="button" aria-label="Đóng">×</button>
-  <button class="lb-btn lb-prev" id="lb-prev" type="button" aria-label="Ảnh trước">←</button>
-  <img id="lb-img" alt="">
-  <button class="lb-btn lb-next" id="lb-next" type="button" aria-label="Ảnh sau">→</button>
-</div>
-
-<!-- QR modal -->
-<div class="qr-modal" id="qr-modal" role="dialog" aria-modal="true" aria-labelledby="qr-title">
-  <div class="qr-sheet">
-    <button class="lb-btn qr-close" id="qr-close" type="button" aria-label="Đóng">×</button>
-    <p class="kicker">Mừng cưới</p>
-    <h3 class="qr-title" id="qr-title"></h3>
-    <div class="qr-box" id="qr-box"></div>
-    <div id="qr-info"></div>
-  </div>
-</div>
-
-<audio id="bg-music" preload="none" loop></audio>
-<button class="music-btn" id="music-btn" type="button" aria-pressed="false" aria-label="Bật nhạc nền" hidden>
-  <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-  <span class="music-label"><b id="music-title"></b><small id="music-state">Chạm để bật nhạc</small></span>
-</button>
-<button class="backtop" id="backtop" type="button" aria-label="Lên đầu trang">↑</button>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<script src="assets/js/config.js"></script>
-<script src="assets/js/main.js"></script>
+<body style="background:#faf8f4;font:16px Georgia,serif;text-align:center;padding-top:40vh">
+<a href="traditional/" style="color:#3a2e28">Mở thiệp cưới →</a>
 </body>
 </html>

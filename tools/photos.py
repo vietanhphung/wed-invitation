@@ -8,10 +8,10 @@
   python3 tools/photos.py qr groom ~/Downloads/qr.png
   python3 tools/photos.py placeholders
 
-Slots: cover, city-1, city-2, forest-1, forest-2, wide, date, closing, gift-groom, gift-bride, gallery-1..N
+Slots: share, cover, city-1, city-2, forest-1, forest-2, wide, date, closing, gift-groom, gift-bride, gallery-1..N
 Every photo gets the same soft film grade (lifted blacks, warm highlights, slightly
-muted colour) so pictures from different cameras sit together. Placing `cover`
-also writes share.jpg (1200x630) for Zalo / Facebook previews.
+muted colour) so pictures from different cameras sit together.
+The `share` slot writes share.jpg (1200x630), the link preview for Zalo / Facebook.
 """
 import argparse
 import math
@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "assets" / "photos"
 QR = ROOT / "assets" / "qr"
 EXTS = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif", ".tif", ".tiff"}
-SLOT_RE = re.compile(r"^(cover|city-[12]|forest-[12]|wide|date|closing|gift-groom|gift-bride|gallery-\d+)$")
+SLOT_RE = re.compile(r"^(share|cover|city-[12]|forest-[12]|wide|date|closing|gift-groom|gift-bride|gallery-\d+)$")
 LONG_SIDE = {"wide": 2400, "closing": 2400, "cover": 2000}
 
 
@@ -76,22 +76,26 @@ def straighten(img, degrees):
 
 def place(slot, src, grade=True, crop=None, rotate=0.0):
     if not SLOT_RE.match(slot):
-        sys.exit(f"unknown slot '{slot}'. Slots: cover, city-1, city-2, forest-1, forest-2, wide, date, closing, gift-groom, gift-bride, gallery-N")
+        sys.exit(f"unknown slot '{slot}'. Slots: share, cover, city-1, city-2, forest-1, forest-2, wide, date, closing, gift-groom, gift-bride, gallery-N")
     img = load(src)
     if rotate:
         img = straighten(img, rotate)
     if crop:  # fractions of the original: left, top, right, bottom
         l, t, r, b = crop
         img = img.crop((round(l * img.width), round(t * img.height), round(r * img.width), round(b * img.height)))
+    OUT.mkdir(parents=True, exist_ok=True)
+    if slot == "share":  # link preview for Zalo / Messenger / Facebook: 1200x630 JPEG
+        img = ImageOps.fit(img, (1200, 630), Image.LANCZOS, centering=(0.5, 0.4))
+        out = OUT / "share.jpg"
+        (film_grade(img) if grade else img).save(out, "JPEG", quality=86)
+        print(f"{slot:<10} <- {Path(src).name}  (1200x630, {out.stat().st_size // 1024} KB)")
+        return
     img.thumbnail((LONG_SIDE.get(slot, 1800),) * 2, Image.LANCZOS)
     if grade:
         img = film_grade(img)
-    OUT.mkdir(parents=True, exist_ok=True)
     out = OUT / f"{slot}.webp"
     img.save(out, "WEBP", quality=82, method=6)
     print(f"{slot:<10} <- {Path(src).name}  ({img.width}x{img.height}, {out.stat().st_size // 1024} KB)")
-    if slot == "cover":
-        ImageOps.fit(img, (1200, 630), Image.LANCZOS, centering=(0.5, 0.35)).save(OUT / "share.jpg", "JPEG", quality=86)
 
 
 def sheet(folder, per=20, cols=5, cell=360):

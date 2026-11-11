@@ -98,7 +98,7 @@ function renderCalendar() {
     action: 'TEMPLATE',
     text: `Lễ thành hôn ${W.groom} & ${W.bride}`,
     dates: `${fmt(due)}/${fmt(end)}`,
-    location: [v.name, v.address].filter(Boolean).join(', '),
+    location: [v.name, v.hall, v.address].filter(Boolean).join(', '),
     details: location.href.split('#')[0]
   });
   $('#gcal-link').href = 'https://calendar.google.com/calendar/render?' + params;
@@ -164,9 +164,10 @@ function renderVenues() {
     const el = make('div', { className: 'venue' });
     el.append(
       make('p', { className: 'venue-label', textContent: v.label }),
-      make('p', { className: 'venue-name', textContent: v.name }),
-      make('p', { className: 'venue-address', textContent: v.address })
+      make('p', { className: 'venue-name', textContent: v.name })
     );
+    if (v.hall) el.appendChild(make('p', { className: 'venue-hall', textContent: v.hall }));
+    el.appendChild(make('p', { className: 'venue-address', textContent: v.address }));
     if (v.time) el.appendChild(make('p', { className: 'venue-time', textContent: v.time }));
     const url = safeUrl(v.mapsUrl);
     if (url) el.appendChild(make('a', { className: 'text-link', href: url, target: '_blank', rel: 'noopener noreferrer', innerHTML: 'Chỉ đường <span aria-hidden="true">↗</span>' }));

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f2f1eb">
+<title>Thiệp mời | Việt Anh &amp; Hương Giang</title>
+<meta name="description" content="Thân mời bạn dự tiệc cưới thân mật của Phùng Việt Anh &amp; Đinh Hương Giang.">
+<!-- Social preview (Zalo / Facebook / Messenger) — crawlers need absolute URLs -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://vietanhphung.com/wed-invitation/intimate/">
+<meta property="og:title" content="Thiệp mời · Việt Anh &amp; Hương Giang">
+<meta property="og:description" content="Tiệc cưới thân mật · Thứ Tư, 16.12.2026 · Mipec Palace, Hà Nội">
+<meta property="og:image" content="https://vietanhphung.com/wed-invitation/assets/photos/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="vi_VN">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ENVELOPE COVER -->
+<div class="cover" id="cover" role="dialog" aria-modal="true" aria-label="Mở thiệp mời">
+  <div class="cover-inner">
+    <p class="label">Thân mời</p>
+    <p class="script guest" data-bind="guest"></p>
+    <span class="hairline" aria-hidden="true"></span>
+
+    <button class="envelope" id="open-btn" type="button" aria-label="Mở thiệp">
+      <img class="bouquet b-left" src="calla.svg" alt="" aria-hidden="true">
+      <span class="polaroid env-photo"><img data-photo="envelope" alt=""></span>
+      <span class="env-back"></span>
+      <span class="env-letter"><span class="script">Save the date</span><span class="label" data-bind="dateDots"></span></span>
+      <span class="env-front"></span>
+      <span class="env-flap"><span class="env-flap-emboss" aria-hidden="true"></span></span>
+      <span class="seal"><span data-bind="seal"></span></span>
+      <img class="bouquet b-right" src="calla.svg" alt="" aria-hidden="true">
+    </button>
+
+    <p class="tap"><i></i>Chạm vào thiệp để mở<i></i></p>
+    <p class="script cover-title">Thiệp Mời</p>
+    <p class="names-caps"><span data-bind="groomShort"></span> &amp; <span data-bind="brideShort"></span></p>
+    <p class="label dark" data-bind="dateDots"></p>
+  </div>
+</div>
+
+<main>
+  <!-- COUNTDOWN + PHOTO + CALENDAR -->
+  <section class="sec save">
+    <img class="bouquet corner-tr" src="calla.svg" alt="" aria-hidden="true">
+    <div class="monogram reveal" aria-hidden="true"><span data-bind="initialG"></span><span data-bind="initialB"></span></div>
+    <p class="label dark reveal">Happily ever after starts in…</p>
+    <div class="countdown boxes reveal" aria-label="Đếm ngược">
+      <div><b data-cd="d">--</b><span>Ngày</span></div>
+      <div><b data-cd="h">--</b><span>Giờ</span></div>
+      <div><b data-cd="m">--</b><span>Phút</span></div>
+      <div><b data-cd="s">--</b><span>Giây</span></div>
+    </div>
+    <figure class="frame-photo reveal"><img data-photo="saveDate" alt="Ảnh cưới" loading="lazy"></figure>
+    <div class="card calendar reveal">
+      <p class="script cal-head">Save our date!</p>
+      <p class="label dark" data-bind="monthTitle"></p>
+      <div class="cal-grid" id="cal-grid"></div>
+      <p class="cal-note">Một tình yêu được khắc trên tim</p>
+    </div>
+  </section>
+
+  <!-- INVITATION + COUPLE -->
+  <section class="sec invite">
+    <p class="label reveal">Thân mời</p>
+    <p class="script guest big reveal" data-bind="guest"></p>
+    <span class="hairline wine reveal" aria-hidden="true"></span>
+    <p class="label dark lines reveal">Tham dự tiệc cưới thân mật<br>cùng gia đình chúng tôi</p>
+
+    <div class="couple">
+      <figure class="polaroid tilt-l reveal">
+        <img data-photo="groom" alt="Chú rể" loading="lazy">
+        <figcaption><span class="script">Chú rể</span><span class="serif-caps" data-bind="groomShort"></span></figcaption>
+      </figure>
+      <figure class="polaroid tilt-r reveal">
+        <img data-photo="bride" alt="Cô dâu" loading="lazy">
+        <figcaption><span class="script">Cô dâu</span><span class="serif-caps" data-bind="brideShort"></span></figcaption>
+      </figure>
+    </div>
+
+    <div class="parents reveal">
+      <div><p class="label dark strong">Nhà trai</p><p class="caps" id="parents-groom"></p></div>
+      <div><p class="label dark strong">Nhà gái</p><p class="caps" id="parents-bride"></p></div>
+    </div>
+  </section>
+
+  <!-- EVENT -->
+  <section class="sec event" id="event">
+    <div class="card event-card reveal">
+      <h2 class="event-title" data-bind="eventTitle"></h2>
+      <div class="when">
+        <div><span class="label">Vào lúc</span><b data-bind="time"></b></div>
+        <div class="day" data-bind="day"></div>
+        <div><span class="label" data-bind="weekday"></span><b data-bind="monthYear"></b></div>
+      </div>
+      <p class="caps muted" data-bind="lunarCaps"></p>
+      <svg class="pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+      <p class="venue" data-bind="venue"></p>
+      <p class="script hall" data-bind="hall"></p>
+      <p class="caps muted" data-bind="address"></p>
+      <div class="event-actions">
+        <a class="pill outline" id="maps-link" target="_blank" rel="noopener noreferrer">Xem bản đồ</a>
+        <a class="pill outline" id="gcal-link" target="_blank" rel="noopener">Thêm vào lịch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDULE + DRESS CODE -->
+  <section class="sec schedule">
+    <h2 class="script-head reveal"><span>Lịch Trình</span><i></i></h2>
+    <ol class="card timeline reveal" id="timeline"></ol>
+    <div class="dress reveal" id="dress"><span class="script">Dress code</span></div>
+  </section>
+
+  <!-- ALBUM -->
+  <section class="sec album">
+    <h2 class="script-head reveal"><span>Album Hình Cưới</span><i></i></h2>
+    <p class="caps intro-text reveal">Những khung hình nhỏ giữ lại hành trình của chúng tôi — từ ánh mắt đầu tiên đến ngày cùng nhau về chung một nhà.</p>
+    <div class="album-grid" id="album"></div>
+  </section>
+
+  <!-- RSVP -->
+  <section class="sec rsvp" id="rsvp">
+    <h2 class="script-head reveal"><span>Xác Nhận Tham Dự</span><i></i></h2>
+    <p class="caps intro-text reveal">Vì là buổi tiệc nhỏ và ấm cúng, sự có mặt của <span data-bind="guestLower"></span> là niềm vui lớn của gia đình chúng tôi. Xin dành chút thời gian xác nhận để chúng tôi chuẩn bị đón tiếp thật chu đáo.</p>
+    <form class="card rsvp-form reveal" id="rsvp-form">
+      <label class="field"><span class="label dark">Tên của bạn</span><input name="name" id="rsvp-name" autocomplete="name" required maxlength="80"></label>
+      <fieldset class="field"><legend class="label dark">Bạn là khách của</legend>
+        <div class="seg"><label><input type="radio" name="side" value="Nhà trai" checked><span>Nhà trai</span></label><label><input type="radio" name="side" value="Nhà gái"><span>Nhà gái</span></label></div>
+      </fieldset>
+      <fieldset class="field"><legend class="label dark">Bạn có tham dự không?</legend>
+        <div class="seg"><label><input type="radio" name="attend" value="Có" checked><span>Có, chắc chắn rồi</span></label><label><input type="radio" name="attend" value="Không"><span>Rất tiếc, mình bận</span></label></div>
+      </fieldset>
+      <div class="field" id="guests-field"><span class="label dark">Số người tham dự <small>(tính cả bạn)</small></span>
+        <div class="stepper"><button type="button" data-step="-1" aria-label="Bớt">−</button><output id="guests-out">1</output><button type="button" data-step="1" aria-label="Thêm">+</button></div>
+        <input type="hidden" name="guests" id="guests" value="1">
+      </div>
+      <label class="field"><span class="label dark">Lời chúc <small>(không bắt buộc)</small></span><textarea name="message" rows="3" maxlength="500"></textarea></label>
+      <button class="pill solid" type="submit">Xác nhận tham dự</button>
+      <p class="rsvp-done" id="rsvp-done" hidden></p>
+    </form>
+  </section>
+
+  <!-- GIFT -->
+  <section class="sec gift">
+    <p class="caps intro-text center reveal">Nếu muốn gửi chút quà mừng, mã QR của hai nhà đã được chuẩn bị sẵn cho bạn.</p>
+    <button class="pill solid reveal" id="gift-btn" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11h16v10H4zM3 7h18v4H3zM12 7v14M12 7C10 3 6 3 6 5.5S10 7 12 7zm0 0c2-4 6-4 6-1.5S14 7 12 7z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+      Gửi quà mừng cưới
+    </button>
+  </section>
+
+  <!-- FINAL COUNTDOWN -->
+  <section class="sec final">
+    <div class="card final-card reveal">
+      <img class="bouquet corner-tl" src="calla.svg" alt="" aria-hidden="true">
+      <p class="script final-head">See you on our big day!</p>
+      <div class="heart"><svg viewBox="0 0 100 90" aria-hidden="true"><path d="M50 88C20 64 2 46 2 26 2 12 13 2 27 2c10 0 18 6 23 14C55 8 63 2 73 2c14 0 25 10 25 24 0 20-18 38-48 62z"/></svg><b data-cd="d">--</b></div>
+      <p class="label dark">Ngày nữa</p>
+      <div class="countdown inline">
+        <div><b data-cd="h">--</b><span>Giờ</span></div>
+        <div><b data-cd="m">--</b><span>Phút</span></div>
+        <div><b data-cd="s">--</b><span>Giây</span></div>
+      </div>
+      <p class="label dark underline"><span data-bind="weekday"></span> · <span data-bind="dateDots"></span></p>
+    </div>
+  </section>
+
+  <!-- THANK YOU -->
+  <section class="thanks">
+    <img data-photo="thanks" alt="" loading="lazy">
+    <div class="thanks-band">
+      <p class="script">Lời cảm ơn!</p>
+      <p class="caps">Cảm ơn <span data-bind="guestLower"></span> đã dành tình cảm cho chúng mình! Sự hiện diện của <span data-bind="guestLower"></span> là món quà quý giá nhất, khiến ngày trọng đại của chúng mình thêm trọn vẹn và đáng nhớ.</p>
+    </div>
+  </section>
+</main>
+
+<!-- gift modal -->
+<div class="modal" id="gift-modal" role="dialog" aria-modal="true" aria-label="Quà mừng cưới">
+  <div class="modal-sheet">
+    <button class="x" type="button" data-close aria-label="Đóng">×</button>
+    <p class="script modal-title">Quà mừng cưới</p>
+    <div class="seg tabs" id="gift-tabs"></div>
+    <div id="gift-body"></div>
+  </div>
+</div>
+
+<!-- photo viewer -->
+<div class="modal viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Xem ảnh">
+  <button class="x" type="button" data-close aria-label="Đóng">×</button>
+  <button class="nav prev" type="button" data-step="-1" aria-label="Ảnh trước">‹</button>
+  <img id="viewer-img" alt="">
+  <button class="nav next" type="button" data-step="1" aria-label="Ảnh sau">›</button>
+</div>
+
+<audio id="bg-music" preload="none" loop></audio>
+<button class="music" id="music-btn" type="button" aria-label="Bật nhạc nền" aria-pressed="false" hidden>
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="18" r="3" fill="currentColor"/><circle cx="17" cy="16" r="3" fill="currentColor"/></svg>
+</button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
