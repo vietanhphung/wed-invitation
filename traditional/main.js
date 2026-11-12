@@ -249,14 +249,21 @@ function toast(t) {
    its reply (no-cors), so a sent request is treated as success; network failures still error. */
 function setupRsvp() {
   const R = W.rsvp, section = $('#rsvp');
-  if (!R || !R.form) {
+  const forms = (R && R.forms) || {};
+  const has = k => Object.prototype.hasOwnProperty.call(forms, k) && !!forms[k];
+  if (!Object.keys(forms).some(has)) {
     section.remove();
     $$('a[href="#rsvp"]').forEach(a => a.remove());
     return;
   }
+  // ?side=groom | bride picks the side's form; without a valid value the guest must choose
+  const asked = (new URLSearchParams(location.search).get('side') || '').trim().toLowerCase();
+  const linkSide = has(asked) ? asked : null;
   const form = $('#rsvp-form'), done = $('#rsvp-done'), nameInput = $('#rsvp-name');
-  const out = $('#rsvp-guests'), submit = $('#rsvp-submit');
-  const KEY = 'rsvp-sent:' + R.form;
+  const out = $('#rsvp-guests'), submit = $('#rsvp-submit'), sideField = $('#rsvp-side-field');
+  const keyFor = side => 'rsvp-sent:' + forms[side];
+  const chosenSide = () => linkSide || (form.side && form.side.value) || null;
+  sideField.hidden = !!linkSide;
   let count = 1;
 
   $('[data-rsvp="yes"]').textContent = R.yes;
@@ -268,7 +275,10 @@ function setupRsvp() {
     out.textContent = count;
   }));
   const attending = () => form.attend.value === 'yes';
-  form.addEventListener('change', () => { $('#rsvp-guests-field').hidden = !attending(); });
+  form.addEventListener('change', () => {
+    $('#rsvp-guests-field').hidden = !attending();
+    if (chosenSide()) sideField.classList.remove('invalid');
+  });
 
   const showDone = yes => {
     $('#rsvp-done-sub').textContent = yes
@@ -278,8 +288,10 @@ function setupRsvp() {
     done.hidden = false;
   };
   try {
-    const prev = JSON.parse(localStorage.getItem(KEY) || 'null');
-    if (prev) showDone(prev.attending);
+    for (const side of linkSide ? [linkSide] : Object.keys(forms).filter(has)) {
+      const prev = JSON.parse(localStorage.getItem(keyFor(side)) || 'null');
+      if (prev) { showDone(prev.attending); break; }
+    }
   } catch { /* storage unavailable: just show the form */ }
 
   $('#rsvp-again').addEventListener('click', () => { done.hidden = true; form.hidden = false; nameInput.focus(); });
@@ -287,6 +299,14 @@ function setupRsvp() {
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const name = nameInput.value.replace(/\s+/g, ' ').trim();
+    const side = chosenSide();
+    if (!side) {
+      sideField.classList.add('invalid');
+      toast('Vui lòng chọn quý khách là khách của nhà trai hay nhà gái');
+      sideField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      form.querySelector('input[name="side"]').focus({ preventScroll: true });
+      return;
+    }
     if (!name) { toast('Vui lòng nhập tên của quý khách'); nameInput.focus(); return; }
     const yes = attending();
     const body = new URLSearchParams({
@@ -298,7 +318,7 @@ function setupRsvp() {
     submit.disabled = true;
     submit.textContent = 'Đang gửi…';
     try {
-      await fetch(R.form, { method: 'POST', mode: 'no-cors', body });
+      await fetch(forms[side], { method: 'POST', mode: 'no-cors', body });
     } catch {
       toast('Không gửi được. Vui lòng kiểm tra kết nối mạng và thử lại.');
       return;
@@ -306,7 +326,7 @@ function setupRsvp() {
       submit.disabled = false;
       submit.textContent = 'Gửi xác nhận';
     }
-    try { localStorage.setItem(KEY, JSON.stringify({ attending: yes, at: Date.now() })); } catch { /* ignore */ }
+    try { localStorage.setItem(keyFor(side), JSON.stringify({ attending: yes, at: Date.now() })); } catch { /* ignore */ }
     showDone(yes);
     toast('Cảm ơn quý khách đã xác nhận!');
   });

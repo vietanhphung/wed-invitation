@@ -30,7 +30,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500&family=IBM+Plex+Mono:wght@400&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="../assets/photos/hero.webp">
-<link rel="stylesheet" href="style.css?v=20261112160409">
+<link rel="stylesheet" href="style.css?v=20261112162644">
 </head>
 <body>
 <div id="progress"></div>
@@ -144,6 +144,15 @@
       <p class="rsvp-intro">Sự hiện diện của <span data-bind="guest"></span> là niềm vui lớn của gia đình chúng tôi. Xin vui lòng xác nhận để chúng tôi chuẩn bị đón tiếp thật chu đáo.</p>
     </div>
     <form class="rsvp-form rise d2" id="rsvp-form" novalidate>
+      <!-- shown only when the link has no valid ?side=groom|bride -->
+      <fieldset class="field side-field" id="rsvp-side-field" hidden>
+        <legend class="field-label">Quý khách là khách của</legend>
+        <p class="rsvp-warning" id="rsvp-side-warning" role="note">Vui lòng chọn nhà trai hoặc nhà gái để lời xác nhận được gửi đến đúng gia đình.</p>
+        <div class="choices two">
+          <label><input type="radio" name="side" value="groom"><span>Nhà trai</span></label>
+          <label><input type="radio" name="side" value="bride"><span>Nhà gái</span></label>
+        </div>
+      </fieldset>
       <label class="field">
         <span class="field-label">Tên của quý khách</span>
         <input id="rsvp-name" name="name" autocomplete="name" maxlength="80" required>
@@ -230,7 +239,7 @@
 <button class="backtop" id="backtop" type="button" aria-label="Lên đầu trang">↑</button>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="config.js?v=20261112160409"></script>
-<script src="main.js?v=20261112160409"></script>
+<script src="config.js?v=20261112162644"></script>
+<script src="main.js?v=20261112162644"></script>
 </body>
 </html>

@@ -74,11 +74,19 @@ window.WEDDING = {
   ],
 
   // Gift accounts. QR images go in ../assets/qr/ (leave qr "" to hide the image)
-  /* RSVP → Google Form (https://forms.gle/yCTYcnEPy9LZDESK7). Answers are posted straight to
-     the form, so they land in its responses / linked Sheet. `yes`/`no` must match the form's
-     choices word for word, or Google silently drops the answer. Set form: "" to hide the section. */
+  /* RSVP → Google Forms. Answers are posted straight to the form, so they land in its
+     responses / linked Sheet. Which form is chosen by the link's ?side= value:
+       …/traditional/?name=…&side=groom   → khách nhà trai  (https://forms.gle/YpR63DuX1AkAfSBR7)
+       …/traditional/?name=…&side=bride   → khách nhà gái   (https://forms.gle/yCTYcnEPy9LZDESK7)
+     No or unknown ?side= → the form asks the guest to pick Nhà trai / Nhà gái before sending.
+     Both forms share the same questions, so they share
+     `fields`, `yes` and `no` — which must match the forms' choices word for word, or Google
+     silently drops the answer. Remove all forms to hide the section. */
   rsvp: {
-    form: "https://docs.google.com/forms/d/e/1FAIpQLSd0AVGdQ9idnnQV-KCwQcWnY9KZQjIl7wkH21SUqnbI6H7tTA/formResponse",
+    forms: {
+      groom: "https://docs.google.com/forms/d/e/1FAIpQLSdHXijT2kNUOFGv6umaGrD6bbMpylvf3_mnvxZjVYItHlhXtA/formResponse",
+      bride: "https://docs.google.com/forms/d/e/1FAIpQLSd0AVGdQ9idnnQV-KCwQcWnY9KZQjIl7wkH21SUqnbI6H7tTA/formResponse"
+    },
     fields: { name: "entry.738212938", attend: "entry.872208366", guests: "entry.1095042761" },
     yes: "Tôi xác nhận sẽ đến",
     no: "Không, tôi không thể tham dự",

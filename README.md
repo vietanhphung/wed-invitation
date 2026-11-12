@@ -40,6 +40,11 @@ Thiệp sẽ hiện **"Thân mời anh Tuấn và chị Lan"** và dùng tên kh
 Không có `?name=`: mẫu traditional ghi "bạn", mẫu intimate ghi "Quý vị & Gia đình".
 (Nếu tên có dấu `&`, `#` hoặc `?`, hãy thay bằng `%26`, `%23`, `%3F`.)
 
+**Xác nhận tham dự (mẫu traditional):** thêm `&side=groom` (khách nhà trai) hoặc `&side=bride` (khách nhà gái) để câu trả lời vào đúng Google Form của mỗi bên:
+- `https://vietanhphung.com/wed-invitation/traditional/?name=anh Tuấn&side=groom` → form *khách nhà trai*
+- `https://vietanhphung.com/wed-invitation/traditional/?name=chị Lan&side=bride` → form *cưới sảnh khách* (nhà gái)
+- Không có `side` (hoặc giá trị khác) → thiệp hiện thông báo và câu hỏi **"Quý khách là khách của: Nhà trai / Nhà gái"**; khách phải chọn trước khi gửi.
+
 ## Xác nhận tham dự (mẫu intimate)
 
 - **Mặc định** (`rsvp.endpoint` để trống): khi khách bấm gửi, lời nhắn xác nhận được sao chép sẵn; nếu điền số `rsvp.zalo`, Zalo sẽ mở để khách dán và gửi cho bạn.
