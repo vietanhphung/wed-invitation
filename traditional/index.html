@@ -30,7 +30,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500&family=IBM+Plex+Mono:wght@400&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="../assets/photos/hero.webp">
-<link rel="stylesheet" href="style.css?v=20261111204518">
+<link rel="stylesheet" href="style.css?v=20261112155406">
 </head>
 <body>
 <div id="progress"></div>
@@ -56,12 +56,12 @@
   <div class="topbar">
     <a class="brand" href="#home" data-bind="monogram"></a>
     <nav class="toplinks" aria-label="Điều hướng">
-      <a href="#story">Chuyện chúng mình</a><a href="#date">Ngày cưới &amp; địa điểm</a><a href="#gallery">Album</a><a href="#gift">Mừng cưới</a>
+      <a href="#story">Chuyện chúng mình</a><a href="#date">Ngày cưới &amp; địa điểm</a><a href="#rsvp">Xác nhận</a><a href="#gallery">Album</a><a href="#gift">Mừng cưới</a>
     </nav>
     <button class="menu-btn" id="menu-btn" type="button" aria-label="Mở menu" aria-expanded="false"><i></i><i></i></button>
   </div>
   <nav class="mobile-nav" id="mobile-nav" aria-label="Điều hướng trên điện thoại">
-    <a href="#home">Trang chủ</a><a href="#story">Chuyện chúng mình</a><a href="#date">Ngày cưới &amp; địa điểm</a><a href="#gallery">Album</a><a href="#gift">Mừng cưới</a>
+    <a href="#home">Trang chủ</a><a href="#story">Chuyện chúng mình</a><a href="#date">Ngày cưới &amp; địa điểm</a><a href="#rsvp">Xác nhận</a><a href="#gallery">Album</a><a href="#gift">Mừng cưới</a>
   </nav>
 </header>
 
@@ -136,6 +136,43 @@
     </div>
   </section>
 
+  <!-- RSVP → Google Form -->
+  <section class="section rsvp" id="rsvp">
+    <div class="section-head rise">
+      <p class="kicker">RSVP</p>
+      <h2 class="title">Xác nhận <em>tham dự</em></h2>
+      <p class="rsvp-intro">Sự hiện diện của <span data-bind="guest"></span> là niềm vui lớn của gia đình chúng tôi. Xin vui lòng xác nhận để chúng tôi chuẩn bị đón tiếp thật chu đáo.</p>
+    </div>
+    <form class="rsvp-form rise d2" id="rsvp-form" novalidate>
+      <label class="field">
+        <span class="field-label">Tên của quý khách</span>
+        <input id="rsvp-name" name="name" autocomplete="name" maxlength="80" required>
+      </label>
+      <fieldset class="field">
+        <legend class="field-label">Quý khách sẽ tham dự chứ?</legend>
+        <div class="choices">
+          <label><input type="radio" name="attend" value="yes" checked><span data-rsvp="yes"></span></label>
+          <label><input type="radio" name="attend" value="no"><span data-rsvp="no"></span></label>
+        </div>
+      </fieldset>
+      <div class="field" id="rsvp-guests-field">
+        <span class="field-label" id="rsvp-guests-label">Số người tham dự</span>
+        <div class="stepper" role="group" aria-labelledby="rsvp-guests-label">
+          <button type="button" data-step="-1" aria-label="Bớt một người">−</button>
+          <output id="rsvp-guests" aria-live="polite">1</output>
+          <button type="button" data-step="1" aria-label="Thêm một người">+</button>
+        </div>
+      </div>
+      <button class="btn solid" type="submit" id="rsvp-submit">Gửi xác nhận</button>
+    </form>
+    <div class="rsvp-done" id="rsvp-done" role="status" hidden>
+      <span class="done-mark" aria-hidden="true">✓</span>
+      <p class="done-title">Cảm ơn quý khách đã xác nhận!</p>
+      <p class="done-sub" id="rsvp-done-sub"></p>
+      <button type="button" class="text-link" id="rsvp-again">Gửi lại xác nhận</button>
+    </div>
+  </section>
+
   <!-- GALLERY -->
   <section class="section gallery" id="gallery">
     <div class="section-head rise">
@@ -193,7 +230,7 @@
 <button class="backtop" id="backtop" type="button" aria-label="Lên đầu trang">↑</button>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="config.js?v=20261111204518"></script>
-<script src="main.js?v=20261111204518"></script>
+<script src="config.js?v=20261112155406"></script>
+<script src="main.js?v=20261112155406"></script>
 </body>
 </html>

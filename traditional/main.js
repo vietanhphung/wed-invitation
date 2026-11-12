@@ -244,6 +244,74 @@ function toast(t) {
   toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
 }
 
+/* ---------- RSVP → Google Form ----------
+   Posts straight to the form's formResponse endpoint. Google doesn't let other sites read
+   its reply (no-cors), so a sent request is treated as success; network failures still error. */
+function setupRsvp() {
+  const R = W.rsvp, section = $('#rsvp');
+  if (!R || !R.form) {
+    section.remove();
+    $$('a[href="#rsvp"]').forEach(a => a.remove());
+    return;
+  }
+  const form = $('#rsvp-form'), done = $('#rsvp-done'), nameInput = $('#rsvp-name');
+  const out = $('#rsvp-guests'), submit = $('#rsvp-submit');
+  const KEY = 'rsvp-sent:' + R.form;
+  let count = 1;
+
+  $('[data-rsvp="yes"]').textContent = R.yes;
+  $('[data-rsvp="no"]').textContent = R.no;
+  if (guestName) nameInput.value = guestName;
+
+  $$('[data-step]', form).forEach(b => b.addEventListener('click', () => {
+    count = Math.min(R.maxGuests || 10, Math.max(1, count + Number(b.dataset.step)));
+    out.textContent = count;
+  }));
+  const attending = () => form.attend.value === 'yes';
+  form.addEventListener('change', () => { $('#rsvp-guests-field').hidden = !attending(); });
+
+  const showDone = yes => {
+    $('#rsvp-done-sub').textContent = yes
+      ? 'Hẹn gặp quý khách trong ngày vui của chúng tôi.'
+      : 'Rất tiếc vì quý khách không thể đến. Cảm ơn quý khách đã báo cho chúng tôi.';
+    form.hidden = true;
+    done.hidden = false;
+  };
+  try {
+    const prev = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (prev) showDone(prev.attending);
+  } catch { /* storage unavailable: just show the form */ }
+
+  $('#rsvp-again').addEventListener('click', () => { done.hidden = true; form.hidden = false; nameInput.focus(); });
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const name = nameInput.value.replace(/\s+/g, ' ').trim();
+    if (!name) { toast('Vui lòng nhập tên của quý khách'); nameInput.focus(); return; }
+    const yes = attending();
+    const body = new URLSearchParams({
+      [R.fields.name]: name,
+      [R.fields.attend]: yes ? R.yes : R.no,
+      // the form's head-count question is required, so a decline still sends 1
+      [R.fields.guests]: String(yes ? count : 1)
+    });
+    submit.disabled = true;
+    submit.textContent = 'Đang gửi…';
+    try {
+      await fetch(R.form, { method: 'POST', mode: 'no-cors', body });
+    } catch {
+      toast('Không gửi được. Vui lòng kiểm tra kết nối mạng và thử lại.');
+      return;
+    } finally {
+      submit.disabled = false;
+      submit.textContent = 'Gửi xác nhận';
+    }
+    try { localStorage.setItem(KEY, JSON.stringify({ attending: yes, at: Date.now() })); } catch { /* ignore */ }
+    showDone(yes);
+    toast('Cảm ơn quý khách đã xác nhận!');
+  });
+}
+
 /* ---------- Music ---------- */
 const audio = $('#bg-music');
 const musicBtn = $('#music-btn');
@@ -353,6 +421,7 @@ renderCalendar();
 renderGallery();
 renderVenues();
 renderGifts();
+setupRsvp();
 setupLightbox();
 setupMusic();
 setupLeaves();

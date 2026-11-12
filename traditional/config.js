@@ -74,6 +74,17 @@ window.WEDDING = {
   ],
 
   // Gift accounts. QR images go in ../assets/qr/ (leave qr "" to hide the image)
+  /* RSVP → Google Form (https://forms.gle/yCTYcnEPy9LZDESK7). Answers are posted straight to
+     the form, so they land in its responses / linked Sheet. `yes`/`no` must match the form's
+     choices word for word, or Google silently drops the answer. Set form: "" to hide the section. */
+  rsvp: {
+    form: "https://docs.google.com/forms/d/e/1FAIpQLSd0AVGdQ9idnnQV-KCwQcWnY9KZQjIl7wkH21SUqnbI6H7tTA/formResponse",
+    fields: { name: "entry.738212938", attend: "entry.872208366", guests: "entry.1095042761" },
+    yes: "Tôi xác nhận sẽ đến",
+    no: "Không, tôi không thể tham dự",
+    maxGuests: 10
+  },
+
   banks: [
     { who: "groom", name: "Vietcombank", number: "0000000000", owner: "NGUYEN VAN A", qr: "../assets/qr/groom.webp" },
     { who: "bride", name: "Techcombank", number: "0000000000", owner: "TRAN THI B",  qr: "../assets/qr/bride.webp" }
