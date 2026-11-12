@@ -292,8 +292,8 @@ function setupRsvp() {
     const body = new URLSearchParams({
       [R.fields.name]: name,
       [R.fields.attend]: yes ? R.yes : R.no,
-      // the form's head-count question is required, so a decline still sends 1
-      [R.fields.guests]: String(yes ? count : 1)
+      // attending = at least 1 person; declining = 0 (the form's scale runs 0–10)
+      [R.fields.guests]: String(yes ? Math.max(1, count) : 0)
     });
     submit.disabled = true;
     submit.textContent = 'Đang gửi…';

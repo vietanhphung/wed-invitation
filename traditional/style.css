@@ -208,6 +208,7 @@ html.locked,html.locked body{overflow:hidden;overscroll-behavior:none}
 .stepper button{width:48px;height:46px;border:0;background:transparent;color:var(--ink);font-size:1.3rem;line-height:1}
 .stepper button:hover{background:var(--beige)}
 .stepper output{min-width:52px;text-align:center;font:400 1.5rem/1 var(--serif)}
+.rsvp-form legend.field-label{margin-bottom:14px} /* legends sit outside the fieldset's grid gap */
 .rsvp-form[hidden],.rsvp-form .field[hidden]{display:none}
 .btn.solid{justify-self:center;min-width:min(100%,260px);background:var(--ink);color:var(--white)}
 .btn.solid:hover{background:var(--maple);border-color:var(--maple)}
