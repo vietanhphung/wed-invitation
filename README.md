@@ -33,6 +33,15 @@ photos/        ảnh gốc (chỉ ở máy, không đưa lên mạng)
 
 ## Link riêng cho từng khách
 
+| Tham số | Lấy từ cột | Dùng ở đâu |
+|---|---|---|
+| `name` | **Họ tên** | Màn hình mở thiệp ("Thân mời …") và ô tên khi xác nhận tham dự |
+| `call` | **Xưng Danh** | Trong các câu: lời mời, xác nhận tham dự, mừng cưới, lời cảm ơn (không có thì dùng `name`) |
+| `side` | `groom` / `bride` (mỗi sheet một bên) | Chọn Google Form của nhà trai / nhà gái (chỉ mẫu traditional) |
+
+Ví dụ: `…/traditional/?name=Gia%20%C4%91%C3%ACnh%20c%20Dung&call=Anh%20ch%E1%BB%8B%20v%C3%A0%20c%C3%A1c%20ch%C3%A1u&side=groom`
+
+
 Thêm `?name=` vào cuối link của mẫu nào cũng được, ví dụ:
 `https://vietanhphung.com/wed-invitation/intimate/?name=anh Tuấn và chị Lan`
 

@@ -12,13 +12,15 @@ const due = new Date(`${W.date}T${W.time}:00${W.utcOffset || '+07:00'}`);
 const initial = s => (s.trim().split(/\s+/).pop()[0] || '');
 
 /* Personal links: …/intimate/?name=anh%20Tuấn → "Thân mời anh Tuấn". Only ever set via textContent. */
-const guestName = (new URLSearchParams(location.search).get('name') || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+const param = k => (new URLSearchParams(location.search).get(k) || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+const guestName = param('name');                 // cover: "Thân mời <name>"
+const guestCall = param('call');                 // Xưng Danh, used inside sentences
 const guest = guestName || W.defaultGuest;
 
 /* ---------- text ---------- */
 const bindings = {
   guest,
-  guestLower: guestName || W.defaultGuestInText,
+  guestLower: guestCall || guestName || W.defaultGuestInText,
   groomShort: W.groomShort, brideShort: W.brideShort,
   seal: initial(W.groom) + initial(W.bride),
   initialG: initial(W.groom), initialB: initial(W.bride),

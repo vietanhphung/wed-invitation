@@ -13,7 +13,7 @@ window.WEDDING = {
   utcOffset: "+07:00",         // Vietnam = +07:00, Toronto = -05:00 (winter)
   lunar: "Tức ngày 08 tháng 11 năm Bính Ngọ (âm lịch)", // "" to hide
 
-  // {guest} becomes the name from the link (…/?name=anh%20Tuấn), or "bạn" when there is none
+  // {guest} becomes the link's ?call= (Xưng Danh), else ?name=, else "bạn"
   invite: "Trân trọng kính mời {guest} đến chung vui cùng gia đình hai bên trong ngày chúng mình về chung một nhà.",
 
   // The story, told in two places

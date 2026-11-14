@@ -11,9 +11,14 @@ const [Y, M, D] = W.date.split('-').map(Number);
 const due = new Date(`${W.date}T${W.time}:00${W.utcOffset || '+07:00'}`);
 const lastWord = s => s.trim().split(/\s+/).pop();
 
-/* Personal links: …/?name=anh%20Tuấn → "Thân mời anh Tuấn". Only ever set via textContent. */
-const guestName = (new URLSearchParams(location.search).get('name') || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+/* Personal links: …/?name=cháu%20Thái%20Duyên&call=cháu%20và%20gia%20đình
+   name → cover ("Thân mời cháu Thái Duyên") and the RSVP name;
+   call → how sentences address them ("Sự hiện diện của cháu và gia đình…"), falls back to name.
+   Only ever set via textContent. */
+const param = k => (new URLSearchParams(location.search).get(k) || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+const guestName = param('name');
 const guest = guestName || 'bạn';
+const guestInText = param('call') || guest;
 
 /* ---------- Text bindings ---------- */
 const bindings = {
@@ -29,7 +34,8 @@ const bindings = {
   calTitle: `Tháng ${M} · ${Y}`,
   time: `${W.time} giờ`,
   lunar: W.lunar || '',
-  invite: W.invite.replace(/\{guest\}/g, guest),
+  invite: W.invite.replace(/\{guest\}/g, guestInText),
+  guestInText,
   guest
 };
 function bindText() {
