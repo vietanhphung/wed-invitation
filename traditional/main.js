@@ -39,7 +39,6 @@ const bindings = {
   calTitle: `Tháng ${M} · ${Y}`,
   time: timeVN,
   dateSlash: `${D}/${M}/${Y}`,
-  whenFull: `${timeVN} · ${WEEKDAYS[new Date(Y, M - 1, D).getDay()]}, ${D}/${M}/${Y}`,
   lunar: W.lunar || '',
   invite: W.invite.replace(/\{guest\}/g, guestInText),
   guestInText,

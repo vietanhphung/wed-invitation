@@ -30,7 +30,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500&family=IBM+Plex+Mono:wght@400&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="../assets/photos/hero.webp">
-<link rel="stylesheet" href="style.css?v=20261115100631">
+<link rel="stylesheet" href="style.css?v=20261115114627">
 </head>
 <body>
 <div id="progress"></div>
@@ -48,6 +48,7 @@
     <p class="kicker" id="intro-kicker">Lễ thành hôn</p>
     <h1 class="intro-names"><span data-bind="groom"></span><em>&amp;</em><span data-bind="bride"></span></h1>
     <span class="rule" aria-hidden="true"></span>
+    <p class="intro-date"><span data-bind="weekday"></span>, <span data-bind="dateSlash"></span></p>
     <button class="btn" id="open-btn" type="button">Mở thiệp</button>
   </div>
 </div>
@@ -56,12 +57,12 @@
   <div class="topbar">
     <a class="brand" href="#home" data-bind="monogram"></a>
     <nav class="toplinks" aria-label="Điều hướng">
-      <a href="#story">Chuyện chúng mình</a><a href="#date">Ngày cưới &amp; địa điểm</a><a href="#rsvp">Xác nhận</a><a href="#gallery">Album</a><a href="#gift">Mừng cưới</a>
+      <a href="#story">Chuyện chúng mình</a><a href="#date">Ngày cưới &amp; địa điểm</a><a href="#rsvp">Xác nhận</a><a href="#gallery">Ảnh cưới</a><a href="#gift">Mừng cưới</a>
     </nav>
     <button class="menu-btn" id="menu-btn" type="button" aria-label="Mở menu" aria-expanded="false"><i></i><i></i></button>
   </div>
   <nav class="mobile-nav" id="mobile-nav" aria-label="Điều hướng trên điện thoại">
-    <a href="#home">Trang chủ</a><a href="#story">Chuyện chúng mình</a><a href="#date">Ngày cưới &amp; địa điểm</a><a href="#rsvp">Xác nhận</a><a href="#gallery">Album</a><a href="#gift">Mừng cưới</a>
+    <a href="#home">Trang chủ</a><a href="#story">Chuyện chúng mình</a><a href="#date">Ngày cưới &amp; địa điểm</a><a href="#rsvp">Xác nhận</a><a href="#gallery">Ảnh cưới</a><a href="#gift">Mừng cưới</a>
   </nav>
 </header>
 
@@ -69,15 +70,13 @@
   <!-- HERO -->
   <section class="section hero" id="home">
     <div class="hero-copy">
-      <p class="kicker rise">The wedding of</p>
+      <p class="kicker rise">Lễ thành hôn của</p>
       <h2 class="names rise"><span data-bind="groom"></span><em>&amp;</em><span data-bind="bride"></span></h2>
-      <p class="when rise d2"><b class="when-time" data-bind="time"></b><span class="when-date"><span data-bind="weekday"></span>, <span data-bind="dateSlash"></span></span></p>
-      <p class="lunar rise d2" data-bind="lunar"></p>
       <a class="btn hero-btn rise d2" href="#date">Ngày cưới &amp; địa điểm <span aria-hidden="true">↓</span></a>
     </div>
     <figure class="film hero-photo rise">
       <div class="frame"><img data-photo="cover" alt="Ảnh cưới của cô dâu chú rể" fetchpriority="high"></div>
-      <figcaption><span>01</span><span>Toronto, ON</span></figcaption>
+      <figcaption><span>01</span><span>Toronto, Canada</span></figcaption>
     </figure>
   </section>
 
@@ -116,12 +115,11 @@
 
   <!-- SAVE THE DATE + VENUE -->
   <section class="section date" id="date">
+    <h2 class="title date-title rise">Ngày <em>hạnh phúc</em></h2>
     <figure class="film date-photo rise">
       <div class="frame"><img data-photo="date" alt="Ảnh cưới" loading="lazy"></div>
     </figure>
     <div class="date-card rise d2">
-      <p class="kicker">Save the date</p>
-      <h2 class="title">Ngày <em>hạnh phúc</em></h2>
       <span class="ds-week" data-bind="weekday"></span>
       <span class="ds-day" data-bind="day"></span>
       <span class="ds-month" data-bind="monthYear"></span>
@@ -139,7 +137,6 @@
   <!-- RSVP → Google Form -->
   <section class="section rsvp" id="rsvp">
     <div class="section-head rise">
-      <p class="kicker">RSVP</p>
       <h2 class="title">Xác nhận <em>tham dự</em></h2>
       <p class="rsvp-intro">Sự hiện diện của <span data-bind="guestInText"></span> là niềm vui lớn của gia đình chúng tôi. Xin vui lòng xác nhận để chúng tôi chuẩn bị đón tiếp thật chu đáo.</p>
     </div>
@@ -185,7 +182,6 @@
   <!-- GALLERY -->
   <section class="section gallery" id="gallery">
     <div class="section-head rise">
-      <p class="kicker">Album</p>
       <h2 class="title">Những <em>khoảnh khắc</em></h2>
     </div>
     <div class="gallery-grid" id="gallery-grid"></div>
@@ -194,7 +190,6 @@
   <!-- GIFT -->
   <section class="section gift" id="gift">
     <div class="section-head rise">
-      <p class="kicker">Mừng cưới</p>
       <h2 class="title">Hộp quà <em>yêu thương</em></h2>
       <p class="gift-intro">Sự hiện diện và lời chúc của <span data-bind="guestInText">bạn</span> đã là món quà quý giá nhất. Nếu muốn gửi lời chúc từ xa, <span data-bind="guestInText">bạn</span> có thể dùng thông tin bên dưới.</p>
     </div>
@@ -205,7 +200,7 @@
   <section class="section closing">
     <div class="closing-photo"><img data-photo="closing" alt="Cô dâu chú rể" loading="lazy"></div>
     <div class="closing-copy rise">
-      <p class="kicker">Thank you</p>
+      <p class="kicker">Trân trọng cảm ơn</p>
       <div class="closing-names" data-bind="couple"></div>
       <p class="mono" data-bind="dateDotsShort"></p>
     </div>
@@ -239,7 +234,7 @@
 <button class="backtop" id="backtop" type="button" aria-label="Lên đầu trang">↑</button>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="config.js?v=20261115100631"></script>
-<script src="main.js?v=20261115100631"></script>
+<script src="config.js?v=20261115114627"></script>
+<script src="main.js?v=20261115114627"></script>
 </body>
 </html>

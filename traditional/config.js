@@ -20,13 +20,13 @@ window.WEDDING = {
   chapters: [
     {
       number: "I",
-      place: "Toronto, ON",
+      place: "Toronto, Canada",
       title: ["Giữa", "thành phố"],
       text: "Giữa những con phố đông người và ánh đèn không bao giờ tắt, chúng mình tìm thấy nhau — một nhịp sống vội vàng bỗng chậm lại."
     },
     {
       number: "II",
-      place: "Algonquin Park",
+      place: "Vườn quốc gia Algonquin",
       title: ["Giữa", "rừng phong"],
       text: "Rồi mùa thu đến, lá phong đỏ rực cả cánh rừng. Chúng mình hiểu rằng, đi đâu cũng được, miễn là đi cùng nhau."
     }
@@ -100,7 +100,7 @@ window.WEDDING = {
 
   // Background music: put an mp3 in ../assets/music/ ("" to hide the player)
   music: "../assets/music/song.mp3",
-  musicTitle: "小幸運 · A Little Happiness (Piano)",
+  musicTitle: "Tiểu Hạnh Vận · Hòa tấu dương cầm",
   musicStart: 0,              // seconds — jump straight to the chorus
 
   leaves: true                // a few slow falling maple leaves
