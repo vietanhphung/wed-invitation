@@ -9,12 +9,12 @@ window.WEDDING = {
 
   // Ceremony date & time (local time at the venue)
   date: "2026-12-16",          // YYYY-MM-DD
-  time: "10:00",               // HH:mm, 24h — placeholder, update with the real time
+  time: "17:30",               // HH:mm, 24h — shown as "17g 30"
   utcOffset: "+07:00",         // Vietnam = +07:00, Toronto = -05:00 (winter)
   lunar: "Tức ngày 08 tháng 11 năm Bính Ngọ (âm lịch)", // "" to hide
 
-  // {guest} becomes the link's ?call= (Xưng Danh), else ?name=, else "bạn"
-  invite: "Trân trọng kính mời {guest} đến chung vui cùng gia đình hai bên trong ngày chúng mình về chung một nhà.",
+  // Written in the parents' voice. {guest} becomes ?call= (Xưng Danh), else ?name=, else "Quý khách"
+  invite: "Trân trọng kính mời {guest} tới chung vui với gia đình chúng tôi nhân ngày hai con về chung một nhà.",
 
   // The story, told in two places
   chapters: [

@@ -4,7 +4,7 @@ const W = window.WEDDING;
 const $ = (s, root = document) => root.querySelector(s);
 const $$ = (s, root = document) => Array.from(root.querySelectorAll(s));
 const make = (tag, props = {}) => Object.assign(document.createElement(tag), props);
-const WEEKDAYS = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
+const WEEKDAYS = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
 const pad = n => String(n).padStart(2, '0');
 
 const [Y, M, D] = W.date.split('-').map(Number);
@@ -16,9 +16,15 @@ const lastWord = s => s.trim().split(/\s+/).pop();
    call → how sentences address them ("Sự hiện diện của cháu và gia đình…"), falls back to name.
    Only ever set via textContent. */
 const param = k => (new URLSearchParams(location.search).get(k) || '').replace(/\s+/g, ' ').trim().slice(0, 60);
-const guestName = param('name');
-const guest = guestName || 'bạn';
-const guestInText = param('call') || guest;
+// Capitalise the form of address out of respect — each comma-separated guest:
+// "cháu Thái Duyên" → "Cháu Thái Duyên", "chị Tâm, bạn Hà" → "Chị Tâm, Bạn Hà"
+const honor = s => s.replace(/(^|,\s*)(\p{L})/gu, (_, sep, ch) => sep + ch.toLocaleUpperCase('vi'));
+const guestName = honor(param('name'));
+const guest = guestName || 'Quý khách';
+const guestInText = honor(param('call')) || guest;
+// "17:30" → "17g 30" (the Vietnamese style used on printed invitations)
+const [HH, MM] = W.time.split(':');
+const timeVN = `${Number(HH)}g ${MM}`;
 
 /* ---------- Text bindings ---------- */
 const bindings = {
@@ -32,7 +38,9 @@ const bindings = {
   day: pad(D),
   monthYear: `Tháng ${pad(M)} · ${Y}`,
   calTitle: `Tháng ${M} · ${Y}`,
-  time: `${W.time} giờ`,
+  time: timeVN,
+  dateSlash: `${D}/${M}/${Y}`,
+  whenFull: `${timeVN} · ${WEEKDAYS[new Date(Y, M - 1, D).getDay()]}, ${D}/${M}/${Y}`,
   lunar: W.lunar || '',
   invite: W.invite.replace(/\{guest\}/g, guestInText),
   guestInText,
@@ -41,6 +49,7 @@ const bindings = {
 function bindText() {
   $$('[data-bind]').forEach(el => { if (el.dataset.bind in bindings) el.textContent = bindings[el.dataset.bind]; });
   $('#intro-guest').hidden = !guestName;
+  $('#intro-kicker').hidden = !!guestName;   // the invitation sentence already says "lễ thành hôn"
   document.title = (guestName ? `Thân mời ${guestName} | ` : 'Thiệp cưới | ') + `${W.groom} & ${W.bride}`;
 }
 
