@@ -150,17 +150,59 @@ html.locked,html.locked body{overflow:hidden;overscroll-behavior:none}
 .date-photo .frame {
   aspect-ratio: 3 / 4;
   background: var(--sand);
-}.date-card{grid-column: 2;
-  grid-row: 2;display:flex;flex-direction:column;align-items:center;max-width:420px;margin:0 auto;text-align:center}
+}
+
 
 .date-title{grid-column: 2;
   grid-row: 1;;margin:0 0 calc(clamp(32px,7vw,120px) * -.4);text-align:center;}
+/* Date information */
+.date-card {
+  text-align: center;
+}
 
-.ds-week,.ds-time{font:400 .68rem/1 var(--sans);letter-spacing:.34em;text-transform:uppercase;color:var(--brown)}
-.ds-day{margin:14px 0 8px;font:400 clamp(5.5rem,10vw,8.5rem)/.9 var(--serif);letter-spacing:-.03em}
-.ds-month{font:italic 400 1.35rem/1.2 var(--serif);color:var(--ink-soft)}
-.ds-time{display:flex;align-items:baseline;gap:.5em;margin-top:18px;color:var(--ink-soft)}
-.ds-time b{font:500 1.9rem/1 var(--serif);letter-spacing:0;text-transform:none;color:var(--ink)}
+.ds-week {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brown);
+}
+
+.ds-day {
+  display: inline;
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.ds-month {
+  display: inline;
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.ds-time {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--brown);
+}
+
+.ds-time b {
+  font-weight: 500;
+}
+
 .calendar{width:100%;margin:28px 0 26px;padding:20px 0 14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .cal-title{margin:0 0 12px;font:400 .62rem/1 var(--sans);letter-spacing:.32em;text-transform:uppercase;color:var(--ink-soft)}
 .cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
