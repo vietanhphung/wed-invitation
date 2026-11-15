@@ -9,7 +9,7 @@ window.WEDDING = {
 
   // Ceremony date & time (local time at the venue)
   date: "2026-12-16",          // YYYY-MM-DD
-  time: "17:30",               // HH:mm, 24h — shown as "17g 30"
+  time: "17:30",               // HH:mm, 24h
   utcOffset: "+07:00",         // Vietnam = +07:00, Toronto = -05:00 (winter)
   lunar: "Tức ngày 08 tháng 11 năm Bính Ngọ (âm lịch)", // "" to hide
 
@@ -66,7 +66,7 @@ window.WEDDING = {
     {
       label: "Nơi tổ chức tiệc cưới",
       name: "Trung tâm Tiệc cưới & Hội nghị Mipec Palace",
-      hall: "Sảnh 2",           // optional
+      hall: "Tầng 2, Sảnh 2",   // optional
       address: "229 Tây Sơn, phường Kim Liên, Hà Nội",
       time: "",                 // optional, e.g. "10:00 · Đón khách"
       mapsUrl: "https://www.google.com/maps/search/?api=1&query=Mipec+Palace+229+T%C3%A2y+S%C6%A1n+Kim+Li%C3%AAn+H%C3%A0+N%E1%BB%99i"

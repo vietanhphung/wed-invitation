@@ -22,9 +22,8 @@ const honor = s => s.replace(/(^|,\s*)(\p{L})/gu, (_, sep, ch) => sep + ch.toLoc
 const guestName = honor(param('name'));
 const guest = guestName || 'Quý khách';
 const guestInText = honor(param('call')) || guest;
-// "17:30" → "17g 30" (the Vietnamese style used on printed invitations)
-const [HH, MM] = W.time.split(':');
-const timeVN = `${Number(HH)}g ${MM}`;
+// shown as written in config, e.g. "17:30"
+const timeVN = W.time;
 
 /* ---------- Text bindings ---------- */
 const bindings = {
