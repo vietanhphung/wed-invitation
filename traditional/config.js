@@ -90,7 +90,10 @@ window.WEDDING = {
     fields: { name: "entry.738212938", attend: "entry.872208366", guests: "entry.1095042761" },
     yes: "Tôi xác nhận sẽ đến",
     no: "Không, tôi không thể tham dự",
-    maxGuests: 10
+    // head-count limit per form. The groom form's "Số người tham dự" is still a 0–10 scale
+    // (Google rejects anything outside it), so cap it at 10 until it becomes a short-answer
+    // question like the bride form — then change groom to 50.
+    maxGuests: { bride: 50, groom: 10 }
   },
 
   banks: [

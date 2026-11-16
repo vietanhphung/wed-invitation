@@ -18,10 +18,20 @@ const lastWord = s => s.trim().split(/\s+/).pop();
 const param = k => (new URLSearchParams(location.search).get(k) || '').replace(/\s+/g, ' ').trim().slice(0, 60);
 // Capitalise the form of address out of respect — each comma-separated guest:
 // "cháu Thái Duyên" → "Cháu Thái Duyên", "chị Tâm, bạn Hà" → "Chị Tâm, Bạn Hà"
+// Xưng Danh in sentence case: "Các Bạn" → "Các bạn", "Gia Đình Dì Xoa" → "Gia đình dì Xoa".
+// Only common address words are lowercased (names stay as typed); the first letter, and the
+// first letter after a comma, are capitalised out of respect ("Chị, Bạn").
+const ADDRESS_WORDS = new Set(('và gia đình các những hai ba bạn anh chị em cô chú dì cậu mợ bác thím dượng ' +
+  'ông bà cháu con cụ thầy quý khách vợ chồng cùng với người thân').split(' '));
+const sentenceCase = s => s.split(/(\s*,\s*)/).map(part => /,/.test(part) ? part : part.split(' ').map((w, i) => {
+  const lower = w.toLocaleLowerCase('vi');
+  const word = ADDRESS_WORDS.has(lower) ? lower : w;
+  return i === 0 ? word.charAt(0).toLocaleUpperCase('vi') + word.slice(1) : word;
+}).join(' ')).join('');
 const honor = s => s.replace(/(^|,\s*)(\p{L})/gu, (_, sep, ch) => sep + ch.toLocaleUpperCase('vi'));
 const guestName = honor(param('name'));
 const guest = guestName || 'Quý khách';
-const guestInText = honor(param('call')) || guest;
+const guestInText = sentenceCase(param('call')) || guest;
 // shown as written in config, e.g. "17:30"
 const timeVN = W.time;
 
@@ -278,15 +288,16 @@ function setupRsvp() {
   const keyFor = side => 'rsvp-sent:' + forms[side];
   const chosenSide = () => linkSide || (form.side && form.side.value) || null;
   sideField.hidden = !!linkSide;
-  let count = 1;
+  const maxFor = side => (R.maxGuests && R.maxGuests[side]) || 50;
+  const maxNow = () => chosenSide() ? maxFor(chosenSide()) : Math.max(...Object.keys(forms).filter(has).map(maxFor));
 
   $('[data-rsvp="yes"]').textContent = R.yes;
   $('[data-rsvp="no"]').textContent = R.no;
   if (guestName) nameInput.value = guestName;
 
   $$('[data-step]', form).forEach(b => b.addEventListener('click', () => {
-    count = Math.min(R.maxGuests || 10, Math.max(1, count + Number(b.dataset.step)));
-    out.textContent = count;
+    const n = (parseInt(out.value, 10) || 0) + Number(b.dataset.step);
+    out.value = Math.min(maxNow(), Math.max(1, n));
   }));
   const attending = () => form.attend.value === 'yes';
   form.addEventListener('change', () => {
@@ -323,11 +334,18 @@ function setupRsvp() {
     }
     if (!name) { toast('Vui lòng nhập tên của quý khách'); nameInput.focus(); return; }
     const yes = attending();
+    // attending: a whole number from 1 to the side's limit; declining always sends 0
+    const raw = out.value.trim(), max = maxFor(side), guests = Number(raw);
+    if (yes && !(/^\d+$/.test(raw) && guests >= 1 && guests <= max)) {
+      toast(`Vui lòng nhập số người tham dự từ 1 đến ${max}`);
+      out.focus();
+      return;
+    }
     const body = new URLSearchParams({
       [R.fields.name]: name,
       [R.fields.attend]: yes ? R.yes : R.no,
       // attending = at least 1 person; declining = 0 (the form's scale runs 0–10)
-      [R.fields.guests]: String(yes ? Math.max(1, count) : 0)
+      [R.fields.guests]: yes ? String(guests) : '0'
     });
     submit.disabled = true;
     submit.textContent = 'Đang gửi…';

@@ -14,7 +14,17 @@ const initial = s => (s.trim().split(/\s+/).pop()[0] || '');
 /* Personal links: …/intimate/?name=anh%20Tuấn → "Thân mời anh Tuấn". Only ever set via textContent. */
 const param = k => (new URLSearchParams(location.search).get(k) || '').replace(/\s+/g, ' ').trim().slice(0, 60);
 const guestName = param('name');                 // cover: "Thân mời <name>"
-const guestCall = param('call');                 // Xưng Danh, used inside sentences
+// Xưng Danh in sentence case: "Các Bạn" → "Các bạn", "Gia Đình Dì Xoa" → "Gia đình dì Xoa".
+// Only common address words are lowercased (names stay as typed); the first letter, and the
+// first letter after a comma, are capitalised out of respect ("Chị, Bạn").
+const ADDRESS_WORDS = new Set(('và gia đình các những hai ba bạn anh chị em cô chú dì cậu mợ bác thím dượng ' +
+  'ông bà cháu con cụ thầy quý khách vợ chồng cùng với người thân').split(' '));
+const sentenceCase = s => s.split(/(\s*,\s*)/).map(part => /,/.test(part) ? part : part.split(' ').map((w, i) => {
+  const lower = w.toLocaleLowerCase('vi');
+  const word = ADDRESS_WORDS.has(lower) ? lower : w;
+  return i === 0 ? word.charAt(0).toLocaleUpperCase('vi') + word.slice(1) : word;
+}).join(' ')).join('');
+const guestCall = sentenceCase(param('call'));   // Xưng Danh, used inside sentences
 const guest = guestName || W.defaultGuest;
 
 /* ---------- text ---------- */
