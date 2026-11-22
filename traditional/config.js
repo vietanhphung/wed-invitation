@@ -14,21 +14,21 @@ window.WEDDING = {
   lunar: "Tức ngày 08 tháng 11 năm Bính Ngọ (âm lịch)", // "" to hide
 
   // Written in the parents' voice. {guest} becomes ?call= (Xưng Danh), else ?name=, else "Quý khách"
-  invite: "Trân trọng kính mời {guest} tới chung vui với gia đình chúng tôi nhân ngày hai con về chung một nhà.",
+  invite: "Trân trọng kính mời {guest} tới chung vui với gia đình chúng tôi nhân ngày Việt Anh & Hương Giang về chung một nhà.",
 
   // The story, told in two places
   chapters: [
     {
       number: "I",
       place: "Toronto, Canada",
-      title: ["Giữa", "thành phố"],
-      text: "Giữa những con phố đông người và ánh đèn không bao giờ tắt, chúng mình tìm thấy nhau — một nhịp sống vội vàng bỗng chậm lại."
+      title: ["Nơi", "thành phố"],
+      text: "Khi Paris lên đèn, Toronto vẫn còn đón nắng. Giữa hai thành phố, hai nhịp sống và một đại dương xa cách, tình yêu của chúng mình lớn lên từ những cuộc gọi xuyên đêm, những lời hẹn ngày gặp lại và cả những tháng ngày chờ đợi."
     },
     {
       number: "II",
-      place: "Vườn quốc gia Algonquin",
+      place: "Vườn quốc gia Algonquin, Canada",
       title: ["Giữa", "rừng phong"],
-      text: "Rồi mùa thu đến, lá phong đỏ rực cả cánh rừng. Chúng mình hiểu rằng, đi đâu cũng được, miễn là đi cùng nhau."
+      text: "Rồi mùa thu đến, nhuộm đỏ những cánh rừng phong nơi Toronto. Sau những tháng ngày yêu thương qua hai thành phố, qua những múi giờ và cả một đại dương xa cách, chúng mình nhận ra rằng, chẳng quan trọng hành trình đưa ta đến đâu, miễn là từ nay luôn có nhau đồng hành."
     }
   ],
   quote: ["Và rồi, mọi con đường", "đều dẫn", "về nhau."], // last part is the accent
@@ -56,8 +56,9 @@ window.WEDDING = {
       { src: "../assets/photos/gallery-12.webp", pos: "50% 65%" }, // 5  Osgoode walk
       { src: "../assets/photos/gallery-6.webp",  pos: "50% 60%" }, // 6  City Hall ramp    (panorama)
       "../assets/photos/gallery-14.webp",                          // 7  bouquet & shoes in the sky
-      { src: "../assets/photos/gallery-5.webp",  pos: "50% 60%" }, // 8  throwing leaves   (wide)
-      { src: "../assets/photos/gallery-15.webp", pos: "50% 72%" }  // 9  maple road        (panorama, last row)
+      { src: "../assets/photos/gallery-5.webp",  pos: "50% 60%" }, // 8  throwing leaves
+      {src:"../assets/photos/gallery-16.webp",   pos: "50% 60%" },                          // 9  (add photo later)
+      { src: "../assets/photos/gallery-15.webp", pos: "50% 72%" }  // 10 maple road        (panorama, last row)
     ]
   },
 

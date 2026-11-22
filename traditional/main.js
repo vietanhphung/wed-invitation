@@ -194,71 +194,25 @@ function renderVenues() {
     el.appendChild(make('p', { className: 'venue-address', textContent: v.address }));
     if (v.time) el.appendChild(make('p', { className: 'venue-time', textContent: v.time }));
     const url = safeUrl(v.mapsUrl);
-    if (url) el.appendChild(make('a', { className: 'text-link', href: url, target: '_blank', rel: 'noopener noreferrer', innerHTML: 'Chỉ đường <span aria-hidden="true">↗</span>' }));
+    if (url) el.appendChild(make('a', { className: 'text-link', href: url, target: '_blank', rel: 'noopener noreferrer', innerHTML: 'Chỉ đường <svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' }));
     root.appendChild(el);
   });
 }
 
-/* ---------- Gift / QR ---------- */
-const giftLabel = b => b.who === 'bride' ? 'Mừng cô dâu' : 'Mừng chú rể';
-let qrReturn = null;
+/* ---------- Gift photos (bride & groom) ---------- */
 function renderGifts() {
   const grid = $('#gift-grid');
   W.banks.forEach(bank => {
-    const btn = make('button', { type: 'button', className: 'gift-btn' });
-    btn.setAttribute('aria-label', giftLabel(bank) + ' – xem mã QR');
+    const card = make('div', { className: 'gift-card' });
     const frame = make('span', { className: 'frame' });
     const img = make('img', { alt: '', loading: 'lazy' });
     frame.appendChild(img);
-    btn.append(
-      frame,
-      make('span', { className: 'g-kicker', textContent: bank.who === 'bride' ? 'Gửi đến cô dâu' : 'Gửi đến chú rể' }),
-      make('span', { className: 'g-title', textContent: giftLabel(bank) }),
-      make('span', { className: 'text-link g-hint', innerHTML: 'Xem mã QR <span aria-hidden="true">→</span>' })
-    );
+    card.appendChild(frame);
     setPhoto(img, bank.who === 'bride' ? W.photos.giftBride : W.photos.giftGroom);
-    btn.addEventListener('click', () => openQr(bank, btn));
-    grid.appendChild(btn);
+    grid.appendChild(card);
   });
 }
-function openQr(bank, trigger) {
-  qrReturn = trigger;
-  $('#qr-title').textContent = giftLabel(bank);
-  const box = $('#qr-box');
-  box.innerHTML = '';
-  if (bank.qr) {
-    const img = make('img', { src: bank.qr, alt: 'Mã QR chuyển khoản' });
-    img.onerror = () => img.remove();
-    box.appendChild(img);
-  }
-  const info = $('#qr-info');
-  info.innerHTML = '';
-  [[bank.name, 'bank-name'], [bank.number, 'bank-number'], [bank.owner, 'bank-owner']].forEach(([v, cls]) => {
-    info.appendChild(make('p', { className: cls, textContent: v || '—' }));
-  });
-  if (bank.number) {
-    const c = make('button', { type: 'button', className: 'btn', textContent: 'Sao chép số tài khoản' });
-    c.addEventListener('click', () => copyText(bank.number));
-    info.appendChild(c);
-  }
-  $('#qr-modal').classList.add('show');
-  document.body.style.overflow = 'hidden';
-  setTimeout(() => $('#qr-close').focus(), 50);
-}
-function closeQr() {
-  if (!$('#qr-modal').classList.contains('show')) return;
-  $('#qr-modal').classList.remove('show');
-  document.body.style.overflow = '';
-  if (qrReturn) qrReturn.focus();
-}
-async function copyText(s) {
-  try { await navigator.clipboard.writeText(s); }
-  catch {
-    const area = make('textarea', { value: s });
-    document.body.append(area); area.select(); document.execCommand('copy'); area.remove();
-  }
-  toast('Đã sao chép số tài khoản');
-}
+
 let toastTimer;
 function toast(t) {
   const el = $('#toast');
@@ -457,10 +411,8 @@ function setupChrome() {
   addEventListener('scroll', onScroll, { passive: true });
   onScroll();
   $('#backtop').addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
-  $('#qr-close').addEventListener('click', closeQr);
-  $('#qr-modal').addEventListener('click', e => { if (e.target.id === 'qr-modal') closeQr(); });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeQr(); closeLightbox(); }
+    if (e.key === 'Escape') { closeLightbox(); }
     if (lbIndex > -1 && e.key === 'ArrowRight') showLb(lbIndex + 1);
     if (lbIndex > -1 && e.key === 'ArrowLeft') showLb(lbIndex - 1);
   });
