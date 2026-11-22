@@ -85,7 +85,7 @@ window.WEDDING = {
   // Lịch trình — `day` marks an entry on another day
   schedule: [
     { time: "13:30", title: "Xe đón khách tại Hà Nội", note: "Khởi hành lên Tam Đảo" },
-    { time: "15:15", title: "Lễ thành hôn", note: "Trao lời thề nguyện & trò chơi gắn kết" },
+    { time: "15:15", title: "Lễ Vows", note: "Trao lời thề nguyện & trò chơi gắn kết" },
     { time: "18:00", title: "Tiệc tối", note: "Tiệc buffet tại villa" },
     { time: "20:00", title: "Xe đưa khách về Hà Nội", note: "Dành cho khách về trong ngày" },
     { time: "21:00", title: "Tiệc sau cưới", note: "Bể bơi, xông hơi, karaoke, bi-a…" },
