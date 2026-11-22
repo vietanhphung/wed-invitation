@@ -15,7 +15,15 @@ const lastWord = s => s.trim().split(/\s+/).pop();
    name → cover ("Thân mời cháu Thái Duyên") and the RSVP name;
    call → how sentences address them ("Sự hiện diện của cháu và gia đình…"), falls back to name.
    Only ever set via textContent. */
-const param = k => (new URLSearchParams(location.search).get(k) || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+// Links forwarded through Excel / Zalo / Messenger sometimes arrive encoded twice
+// ("anh%2520ch%25E1%25BB%258B" → "anh%20ch%E1%BB%8B"), so keep decoding while it still looks encoded.
+const decodeFully = v => {
+  for (let i = 0; i < 3 && /%[0-9a-f]{2}/i.test(v); i++) {
+    try { v = decodeURIComponent(v.replace(/\+/g, ' ')); } catch { break; }
+  }
+  return v;
+};
+const param = k => decodeFully(new URLSearchParams(location.search).get(k) || '').replace(/\s+/g, ' ').trim().slice(0, 60);
 // Capitalise the form of address out of respect — each comma-separated guest:
 // "cháu Thái Duyên" → "Cháu Thái Duyên", "chị Tâm, bạn Hà" → "Chị Tâm, Bạn Hà"
 // Xưng Danh in sentence case: "Các Bạn" → "Các bạn", "Gia Đình Dì Xoa" → "Gia đình dì Xoa".

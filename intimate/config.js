@@ -101,7 +101,7 @@ window.WEDDING = {
       ["Phở cuốn", "Rouleaux de phở au bœuf"]
     ] },
     { course: "Đồ nguội", dishes: [
-      ["Pa tê đồng quê và thịt heo rillettes của bếp trưởng Sáng", "Pâté de campagne et rillettes de porc"],
+      ["Pa tê đồng quê và thịt heo rillettes", "Pâté de campagne et rillettes de porc"],
       ["Xúc xích Lyon, xúc xích tỏi, salami và chorizo", "Rosette de Lyon, saucisson à l'ail, salami, chorizo"],
       ["Bánh mì với bơ ớt ngọt", "Pain et beurre au piment doux confit"]
     ] },
