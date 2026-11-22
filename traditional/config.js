@@ -104,7 +104,7 @@ window.WEDDING = {
 
   // Background music: put an mp3 in ../assets/music/ ("" to hide the player)
   music: "../assets/music/song.mp3",
-  musicTitle: "Tiểu Hạnh Vận · Hòa tấu dương cầm",
+  musicTitle: "50 năm về sau - Piano",
   musicStart: 0,              // seconds — jump straight to the chorus
 
   leaves: true                // a few slow falling maple leaves

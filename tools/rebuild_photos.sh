@@ -9,7 +9,7 @@ place() { python3 tools/photos.py place "$@"; }
 place hero       photos/hero.webp --no-grade   # new pick (22/11): resized only, colours and grain as edited
 place cover      photos/cover.jpg        # HY707180 — intimate envelope polaroid
 place city-1     photos/city-1.webp --no-grade   # new pick (22/11): resized only, colours and grain as edited
-place city-2     photos/city-2.webp --no-grade   # new pick (22/11): resized only, colours and grain as edited
+place city-2     photos/city-2.jpg --no-grade --crop 0.2763,0.0599,0.8345,1   # HYC08182, same framing as emmy's crop, from the original JPG
 place forest-1   photos/forest-1.webp --no-grade   # new pick (22/11): resized only, colours and grain as edited
 place forest-2   photos/forest-2.webp --no-grade   # new pick (22/11): resized only, colours and grain as edited
 place wide       photos/wide.webp --no-grade   # new pick (22/11): resized only, colours and grain as edited

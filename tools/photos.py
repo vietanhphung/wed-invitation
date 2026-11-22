@@ -97,7 +97,7 @@ def denoise(img, strength=1.0, radius=2):
     return Image.fromarray((np.clip(out, 0, 1) * 255 + 0.5).astype(np.uint8))
 
 
-def place(slot, src, grade=True, crop=None, rotate=0.0, clean=0.0):
+def place(slot, src, grade=True, crop=None, rotate=0.0, clean=0.0, quality=82):
     if not SLOT_RE.match(slot):
         sys.exit(f"unknown slot '{slot}'. Slots: share, hero, cover, city-1, city-2, forest-1, forest-2, wide, date, closing, gift-groom, gift-bride, gallery-N")
     img = load(src)
@@ -119,7 +119,7 @@ def place(slot, src, grade=True, crop=None, rotate=0.0, clean=0.0):
     if grade:
         img = film_grade(img)
     out = OUT / f"{slot}.webp"
-    img.save(out, "WEBP", quality=82, method=6)
+    img.save(out, "WEBP", quality=quality, method=6)
     print(f"{slot:<10} <- {Path(src).name}  ({img.width}x{img.height}, {out.stat().st_size // 1024} KB)")
 
 
@@ -196,6 +196,7 @@ def main():
     p.add_argument("--no-grade", action="store_true", help="keep the photo's original colours")
     p.add_argument("--crop", metavar="L,T,R,B", help="zoom into part of the photo, as fractions, e.g. 0.19,0.375,0.81,1")
     p.add_argument("--rotate", type=float, default=0.0, metavar="DEG", help="straighten a tilted photo (positive = counter-clockwise), applied before --crop")
+    p.add_argument("--quality", type=int, default=82, metavar="Q", help="WebP quality 1-100 (default 82; higher = sharper, larger file)")
     p.add_argument("--denoise", type=float, default=0.0, metavar="S", help="reduce film grain after resizing (1 = gentle, 2 = strong)")
     a = p.parse_args()
     crop = tuple(float(v) for v in a.crop.split(",")) if a.crop else None
@@ -204,7 +205,7 @@ def main():
     if a.cmd == "sheet" and len(a.args) == 1:
         sheet(a.args[0])
     elif a.cmd == "place" and len(a.args) == 2:
-        place(a.args[0], a.args[1], grade=not a.no_grade, crop=crop, rotate=a.rotate, clean=a.denoise)
+        place(a.args[0], a.args[1], grade=not a.no_grade, crop=crop, rotate=a.rotate, clean=a.denoise, quality=a.quality)
     elif a.cmd == "qr" and len(a.args) == 2 and a.args[0] in ("groom", "bride"):
         qr(*a.args)
     elif a.cmd == "placeholders":
