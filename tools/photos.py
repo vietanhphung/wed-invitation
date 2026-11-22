@@ -74,7 +74,30 @@ def straighten(img, degrees):
     return img.crop((round((w - cw) / 2), round((h - ch) / 2), round((w + cw) / 2), round((h + ch) / 2)))
 
 
-def place(slot, src, grade=True, crop=None, rotate=0.0):
+def _box(a, r):
+    """Mean over a (2r+1)^2 window, via summed-area tables (edges clamped)."""
+    pad = np.pad(a.astype(np.float64), ((r + 1, r), (r + 1, r)), mode="edge")   # float64: big sums lose precision in float32
+    c = pad.cumsum(0).cumsum(1)
+    k = 2 * r + 1
+    return (c[k:, k:] - c[:-k, k:] - c[k:, :-k] + c[:-k, :-k]) / (k * k)
+
+
+def denoise(img, strength=1.0, radius=2):
+    """Edge-preserving grain reduction (self-guided filter, per channel).
+    Smooths grain in flat areas (walls, sky, skin) while keeping edges and detail."""
+    a = np.asarray(img, np.float64) / 255.0
+    eps = (0.035 * strength) ** 2          # grain below ~3.5% contrast is smoothed
+    out = np.empty_like(a)
+    for ch in range(3):
+        I = a[..., ch]
+        mean = _box(I, radius)
+        var = np.maximum(_box(I * I, radius) - mean * mean, 0)
+        k = var / (var + eps)
+        out[..., ch] = _box(k, radius) * I + _box((1 - k) * mean, radius)
+    return Image.fromarray((np.clip(out, 0, 1) * 255 + 0.5).astype(np.uint8))
+
+
+def place(slot, src, grade=True, crop=None, rotate=0.0, clean=0.0):
     if not SLOT_RE.match(slot):
         sys.exit(f"unknown slot '{slot}'. Slots: share, hero, cover, city-1, city-2, forest-1, forest-2, wide, date, closing, gift-groom, gift-bride, gallery-N")
     img = load(src)
@@ -91,6 +114,8 @@ def place(slot, src, grade=True, crop=None, rotate=0.0):
         print(f"{slot:<10} <- {Path(src).name}  (1200x630, {out.stat().st_size // 1024} KB)")
         return
     img.thumbnail((LONG_SIDE.get(slot, 1800),) * 2, Image.LANCZOS)
+    if clean:
+        img = denoise(img, clean)
     if grade:
         img = film_grade(img)
     out = OUT / f"{slot}.webp"
@@ -171,6 +196,7 @@ def main():
     p.add_argument("--no-grade", action="store_true", help="keep the photo's original colours")
     p.add_argument("--crop", metavar="L,T,R,B", help="zoom into part of the photo, as fractions, e.g. 0.19,0.375,0.81,1")
     p.add_argument("--rotate", type=float, default=0.0, metavar="DEG", help="straighten a tilted photo (positive = counter-clockwise), applied before --crop")
+    p.add_argument("--denoise", type=float, default=0.0, metavar="S", help="reduce film grain after resizing (1 = gentle, 2 = strong)")
     a = p.parse_args()
     crop = tuple(float(v) for v in a.crop.split(",")) if a.crop else None
     if crop and (len(crop) != 4 or not (0 <= crop[0] < crop[2] <= 1 and 0 <= crop[1] < crop[3] <= 1)):
@@ -178,7 +204,7 @@ def main():
     if a.cmd == "sheet" and len(a.args) == 1:
         sheet(a.args[0])
     elif a.cmd == "place" and len(a.args) == 2:
-        place(a.args[0], a.args[1], grade=not a.no_grade, crop=crop, rotate=a.rotate)
+        place(a.args[0], a.args[1], grade=not a.no_grade, crop=crop, rotate=a.rotate, clean=a.denoise)
     elif a.cmd == "qr" and len(a.args) == 2 and a.args[0] in ("groom", "bride"):
         qr(*a.args)
     elif a.cmd == "placeholders":
