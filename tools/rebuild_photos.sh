@@ -34,5 +34,12 @@ place gallery-14 photos/gallery-14.webp --no-grade   # new pick (22/11): resized
 place gallery-15 photos/gallery-15.webp --no-grade   # new pick (22/11): resized only, colours and grain as edited
 place gallery-16 photos/gallery-16.webp --no-grade   # new pick (22/11): resized only, colours and grain as edited
 
+# intimate page: villa amenities (The Black and White Villa, Tam Đảo) — originals in photos/villa/
+place villa-pool       photos/villa/villa-pool.jpg --no-grade
+place villa-pickleball photos/villa/villa-pickleball.jpg --no-grade
+place villa-sauna      photos/villa/villa-sauna.jpg --no-grade
+place villa-karaoke    photos/villa/villa-karaoke-bida.jpg --no-grade   # karaoke + pool table room
+place villa-bedroom    photos/villa/villa-bedroom.jpg --no-grade
+
 # link preview image (Zalo / Messenger / Facebook), 1200x630 — HY705720, cropped to drop the blown-out sky
 if [ -f photos/share.jpg ]; then place share photos/share.jpg --crop 0,0.16,1,0.975; else echo "share      (photos/share.jpg missing — keeping the current preview image)"; fi

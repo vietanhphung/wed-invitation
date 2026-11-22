@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "assets" / "photos"
 QR = ROOT / "assets" / "qr"
 EXTS = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif", ".tif", ".tiff"}
-SLOT_RE = re.compile(r"^(share|hero|cover|city-[12]|forest-[12]|wide|date|closing|gift-groom|gift-bride|gallery-\d+)$")
+SLOT_RE = re.compile(r"^(share|hero|cover|city-[12]|forest-[12]|wide|date|closing|gift-groom|gift-bride|gallery-\d+|villa-[a-z]+)$")
 LONG_SIDE = {"wide": 2400, "closing": 2400, "cover": 2000, "hero": 2400}
 
 
