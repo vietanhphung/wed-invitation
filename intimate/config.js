@@ -144,7 +144,7 @@ window.WEDDING = {
   // Background music: put an mp3 in ../assets/music/ ("" to hide the player)
   music: "../assets/music/song_intimate.mp3",
   musicTitle: "Crazier - Taylor Swift - Piano",
-  musicStart: 0,              // seconds — jump straight to the chorus
+  musicStart: 17,              // seconds — jump straight to the chorus
 
   leaves: true                // a few slow falling maple leaves
 };
