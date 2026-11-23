@@ -115,12 +115,11 @@ window.WEDDING = {
     { course: "Món chính", dishes: [
       ["Bò hầm vang đỏ kiểu Bourgogne", "Bœuf bourguignon"],
       ["Gà ta quay rút xương sốt hạt dẻ", "Poulet rôti désossé, sauce aux marrons"],
-      ["Cá hồi áp chảo sốt bơ nâu chanh leo", "Filet de saumon poêlé, beurre noisette et fruit de la passion"]
+      ["Cá hồi áp chảo sốt bơ nâu chanh leo", "Filet de saumon poêlé, beurre noisette et fruit de la passion"], ["Mì Ý sốt carbonara", "Spaghetti carbonara"]
     ] },
     { course: "Món ăn kèm", dishes: [
       ["Đậu Pháp xào tỏi", "Haricots verts sautés à l'ail"],
-      ["Khoai tây bi chiên bơ", "Pommes rissolées"],
-      ["Mì Ý sốt carbonara", "Spaghetti carbonara"]
+      ["Khoai tây bi chiên bơ", "Pommes rissolées"]
     ] },
     { course: "Tráng miệng", dishes: [
       ["Bánh mousse dâu tây và sô-cô-la", "Mousse de fraises et chocolat"],
