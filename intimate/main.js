@@ -23,7 +23,14 @@ const decodeFully = v => {
   }
   return v;
 };
-const param = k => decodeFully(new URLSearchParams(location.search).get(k) || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+// Guest details may come as ?name=… or #name=… (after # Facebook/Messenger ignore it, so every
+// guest link shares the one cached preview of the page). The ?query wins when both are present.
+const urlParams = (() => {
+  const p = new URLSearchParams(location.hash.includes('=') ? location.hash.slice(1) : '');
+  new URLSearchParams(location.search).forEach((v, k) => p.set(k, v));
+  return p;
+})();
+const param = k => decodeFully(urlParams.get(k) || '').replace(/\s+/g, ' ').trim().slice(0, 60);
 // Capitalise the form of address out of respect — each comma-separated guest:
 // "cháu Thái Duyên" → "Cháu Thái Duyên", "chị Tâm, bạn Hà" → "Chị Tâm, Bạn Hà"
 // Xưng Danh in sentence case: "Các Bạn" → "Các bạn", "Gia Đình Dì Xoa" → "Gia đình dì Xoa".
@@ -224,6 +231,24 @@ function renderVenues() {
     root.appendChild(el);
   });
 }
+function renderDressCode() {
+  const root = $('#dress');
+  const d = W.dressCode || {};
+  const colors = (d.colors || []).filter(c => /^#[0-9a-f]{3,8}$/i.test(c));
+  if (!root || !colors.length) return;
+  const el = make('div', { className: 'dress' });
+  el.appendChild(make('p', { className: 'venue-label', textContent: d.label || 'Dress code' }));
+  const row = make('ul', { className: 'dress-swatches' });
+  row.setAttribute('aria-label', 'Bảng màu trang phục');
+  colors.forEach(c => {
+    const li = make('li', { className: 'dress-swatch', title: c });
+    li.style.background = c;
+    row.appendChild(li);
+  });
+  el.appendChild(row);
+  if (d.note) el.appendChild(make('p', { className: 'dress-note', textContent: d.note }));
+  root.appendChild(el);
+}
 
 /* ---------- Gift photos (bride & groom) ---------- */
 function renderGifts() {
@@ -263,7 +288,7 @@ function setupRsvp() {
     return;
   }
   // ?side=groom | bride picks the side's form; without a valid value the guest must choose
-  const asked = (new URLSearchParams(location.search).get('side') || '').trim().toLowerCase();
+  const asked = (urlParams.get('side') || '').trim().toLowerCase();
   const linkSide = has(asked) ? asked : null;
   const form = $('#rsvp-form'), done = $('#rsvp-done'), nameInput = $('#rsvp-name');
   const out = $('#rsvp-guests'), submit = $('#rsvp-submit'), sideField = $('#rsvp-side-field');
@@ -501,6 +526,7 @@ renderChapters();
 renderCalendar();
 renderGallery();
 renderVenues();
+renderDressCode();
 renderGifts();
 renderSchedule();
 renderMenu();

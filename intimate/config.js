@@ -79,6 +79,13 @@ window.WEDDING = {
     }
   ],
 
+  // Dress code — shown under "Thêm vào lịch". Set colors to [] to hide.
+  dressCode: {
+    label: "Dress code",
+    note: "",                   // optional line under the swatches
+    colors: ["#f7f2e6", "#e8e0cc", "#e0d4bb", "#d7bb9d", "#9f8066", "#9a8471", "#422c20"]
+  },
+
   // No RSVP form for the intimate dinner yet (the section is not on this page).
   rsvp: { forms: {} },
 

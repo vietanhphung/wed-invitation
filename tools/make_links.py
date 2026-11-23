@@ -27,14 +27,16 @@ def clean(value):
     return " ".join(str(value).split()) if value not in (None, "") else ""
 
 
-def link_for(page, name, call, side):
+def link_for(page, name, call, side, sep="#"):
     params = {"name": name}
     if call:
         params["call"] = call
     if side and page == "traditional":
         params["side"] = side
-    # quote_via=quote → spaces as %20, which survives Zalo / Messenger better than "+"
-    return f"{BASE}/{page}/?" + urlencode(params, quote_via=quote)
+    # quote_via=quote → spaces as %20, which survives Zalo / Messenger better than "+".
+    # "#" (default): Facebook/Messenger ignore the fragment, so every link reuses the page's one
+    # cached preview and it shows instantly; "?" makes each link a new URL Facebook must fetch first.
+    return f"{BASE}/{page}/{sep}" + urlencode(params, quote_via=quote)
 
 
 def main():
@@ -43,6 +45,7 @@ def main():
     ap.add_argument("--side", choices=["groom", "bride"], help="whose guests this sheet holds (traditional RSVP form)")
     ap.add_argument("--page", choices=["traditional", "intimate"], default="traditional")
     ap.add_argument("--sheet", help="sheet name (default: first sheet)")
+    ap.add_argument("--query", action="store_true", help="old-style ?name=… links instead of #name=…")
     ap.add_argument("--out", type=Path, help="output file (default: '<input> - links.xlsx')")
     a = ap.parse_args()
 
@@ -65,7 +68,7 @@ def main():
         name, call = clean(name), clean(call)
         if not name:
             continue
-        url = link_for(a.page, name, call, a.side)
+        url = link_for(a.page, name, call, a.side, "?" if a.query else "#")
         out.append([stt, name, call, url])
         c = out.cell(row=out.max_row, column=4)
         c.hyperlink = url

@@ -15,7 +15,14 @@ const lastWord = s => s.trim().split(/\s+/).pop();
    name → cover ("Thân mời cháu Thái Duyên") and the RSVP name;
    call → how sentences address them ("Sự hiện diện của cháu và gia đình…"), falls back to name.
    Only ever set via textContent. */
-const param = k => (new URLSearchParams(location.search).get(k) || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+// Guest details may come as ?name=… or #name=… (after # Facebook/Messenger ignore it, so every
+// guest link shares the one cached preview of the page). The ?query wins when both are present.
+const urlParams = (() => {
+  const p = new URLSearchParams(location.hash.includes('=') ? location.hash.slice(1) : '');
+  new URLSearchParams(location.search).forEach((v, k) => p.set(k, v));
+  return p;
+})();
+const param = k => (urlParams.get(k) || '').replace(/\s+/g, ' ').trim().slice(0, 60);
 // Capitalise the form of address out of respect — each comma-separated guest:
 // "cháu Thái Duyên" → "Cháu Thái Duyên", "chị Tâm, bạn Hà" → "Chị Tâm, Bạn Hà"
 // Xưng Danh in sentence case: "Các Bạn" → "Các bạn", "Gia Đình Dì Xoa" → "Gia đình dì Xoa".
@@ -235,7 +242,7 @@ function setupRsvp() {
     return;
   }
   // ?side=groom | bride picks the side's form; without a valid value the guest must choose
-  const asked = (new URLSearchParams(location.search).get('side') || '').trim().toLowerCase();
+  const asked = (urlParams.get('side') || '').trim().toLowerCase();
   const linkSide = has(asked) ? asked : null;
   const form = $('#rsvp-form'), done = $('#rsvp-done'), nameInput = $('#rsvp-name');
   const out = $('#rsvp-guests'), submit = $('#rsvp-submit'), sideField = $('#rsvp-side-field');
