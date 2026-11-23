@@ -88,7 +88,7 @@ window.WEDDING = {
     { time: "15:15", title: "Lễ Vows", note: "Trao lời thề nguyện & trò chơi gắn kết" },
     { time: "18:00", title: "Tiệc tối", note: "Tiệc buffet tại villa" },
     { time: "20:00", title: "Xe đưa khách về Hà Nội", note: "Dành cho khách về trong ngày" },
-    { time: "21:00", title: "Tiệc sau cưới", note: "Bể bơi, xông hơi, karaoke, bi-a…" },
+    { time: "21:00", title: "After-party và các hoạt động", note: "Bể bơi, xông hơi, karaoke, bi-a…" },
     { time: "10:30", day: "13/12", title: "Xe đưa khách về Hà Nội", note: "Dành cho khách nghỉ lại qua đêm" }
   ],
 
