@@ -3,13 +3,14 @@
 
   python3 tools/make_links.py ~/Downloads/"Danh sach.xlsx" --side bride
   python3 tools/make_links.py nha_trai.xlsx --side groom --page traditional
+  python3 tools/make_links.py que.xlsx --side groom --page countryside
   python3 tools/make_links.py list.xlsx --page intimate          # intimate ignores side
 
 Writes "<input> - links.xlsx" next to the input (the original is never modified) with a
 clickable Link column. Each link carries:
   name = Họ tên      → cover "Thân mời …" and the RSVP name
   call = Xưng Danh   → wording inside sentences (falls back to name when empty)
-  side = groom|bride → which Google Form receives the RSVP (traditional page only)
+  side = groom|bride → which Google Form receives the RSVP (traditional / countryside only)
 Rows without a Họ tên are skipped.
 """
 import argparse
@@ -31,7 +32,7 @@ def link_for(page, name, call, side, sep="#"):
     params = {"name": name}
     if call:
         params["call"] = call
-    if side and page == "traditional":
+    if side and page in ("traditional", "countryside"):
         params["side"] = side
     # quote_via=quote → spaces as %20, which survives Zalo / Messenger better than "+".
     # "#" (default): Facebook/Messenger ignore the fragment, so every link reuses the page's one
@@ -42,8 +43,8 @@ def link_for(page, name, call, side, sep="#"):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("xlsx", type=Path)
-    ap.add_argument("--side", choices=["groom", "bride"], help="whose guests this sheet holds (traditional RSVP form)")
-    ap.add_argument("--page", choices=["traditional", "intimate"], default="traditional")
+    ap.add_argument("--side", choices=["groom", "bride"], help="whose guests this sheet holds (traditional / countryside RSVP form)")
+    ap.add_argument("--page", choices=["traditional", "countryside", "intimate"], default="traditional")
     ap.add_argument("--sheet", help="sheet name (default: first sheet)")
     ap.add_argument("--query", action="store_true", help="old-style ?name=… links instead of #name=…")
     ap.add_argument("--out", type=Path, help="output file (default: '<input> - links.xlsx')")

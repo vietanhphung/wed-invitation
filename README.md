@@ -5,6 +5,7 @@ Hai mẫu thiệp trong cùng một repo, dùng chung ảnh và nhạc:
 | Link | Mẫu | Thư mục |
 |---|---|---|
 | `vietanhphung.com/wed-invitation/traditional/` | **Film & Maple** — tối giản, ảnh màu phim Toronto & Algonquin | `traditional/` |
+| `vietanhphung.com/wed-invitation/countryside/` | **Film & Maple** như traditional — lễ ở quê: 10:00 Thứ Bảy 19.12.2026, TT Văn hóa – Thể thao xã Hát Môn | `countryside/` |
 | `vietanhphung.com/wed-invitation/intimate/` | **Hoa Rum** — tiệc cưới thân mật: phong bì, sáp niêm phong, hoa rum, polaroid, xác nhận tham dự | `intimate/` |
 | `vietanhphung.com/wed-invitation/` | tự chuyển sang `/traditional/` (link cũ vẫn dùng được, giữ cả `?name=`) | `index.html` |
 
