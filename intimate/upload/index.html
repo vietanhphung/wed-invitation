@@ -13,8 +13,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=20261125185533">
-<link rel="stylesheet" href="../gallery/gallery.css?v=20261125185533">
+<link rel="stylesheet" href="../style.css?v=20261125185803">
+<link rel="stylesheet" href="../gallery/gallery.css?v=20261125185803">
 </head>
 <body>
 <header class="g-top">
@@ -29,13 +29,6 @@
     <p class="g-intro">Những khoảnh khắc bạn ghi lại là món quà quý của chúng mình. Hãy gửi ảnh vào đây để mọi người cùng xem nhé.</p>
   </div>
 
-  <!-- Carousel: newest guest photos; the couple's photos until the first upload arrives -->
-  <section class="g-carousel" id="carousel" aria-roledescription="carousel" aria-label="Ảnh mới trong album"
-    data-fallback="../../assets/photos/gallery-7.webp ../../assets/photos/gallery-8.webp ../../assets/photos/gallery-9.webp ../../assets/photos/gallery-12.webp ../../assets/photos/gallery-14.webp ../../assets/photos/gallery-5.webp ../../assets/photos/gallery-16.webp">
-    <ul class="g-track" id="carousel-track"></ul>
-    <div class="g-dots" id="carousel-dots" aria-hidden="true"></div>
-  </section>
-
   <div class="g-upload" id="upload-box">
     <label class="btn solid g-pick">
       <input type="file" id="file-input" accept="image/*" multiple hidden>
@@ -44,6 +37,13 @@
     <p class="g-hint">Chọn một hoặc nhiều ảnh · tối đa <span id="max-mb">30</span> MB mỗi ảnh</p>
     <p class="g-status" id="upload-status" role="status" aria-live="polite"></p>
   </div>
+
+  <!-- Carousel: newest guest photos; the couple's photos until the first upload arrives -->
+  <section class="g-carousel" id="carousel" aria-roledescription="carousel" aria-label="Ảnh mới trong album"
+    data-fallback="../../assets/photos/gallery-7.webp ../../assets/photos/gallery-8.webp ../../assets/photos/gallery-9.webp ../../assets/photos/gallery-12.webp ../../assets/photos/gallery-14.webp ../../assets/photos/gallery-5.webp ../../assets/photos/gallery-16.webp">
+    <ul class="g-track" id="carousel-track"></ul>
+    <div class="g-dots" id="carousel-dots" aria-hidden="true"></div>
+  </section>
 
   <p class="g-note" id="notice" hidden></p>
 
@@ -58,7 +58,7 @@
   <button class="g-lb-btn g-lb-next" type="button" id="lb-next" aria-label="Ảnh sau">›</button>
 </dialog>
 
-<script src="../gallery/config.js?v=20261125185533"></script>
-<script type="module" src="../gallery/main.js?v=20261125185533"></script>
+<script src="../gallery/config.js?v=20261125185803"></script>
+<script type="module" src="../gallery/main.js?v=20261125185803"></script>
 </body>
 </html>
