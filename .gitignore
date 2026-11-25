@@ -3,3 +3,20 @@ __pycache__/
 # originals stay local — only the processed web copies in assets/ are published
 /photos/
 /song-original.mp3
+
+# Terraform: state, plans, local settings (examples are committed instead)
+.terraform/
+.terraform-validate/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+tfplan
+tfplan.json
+backend.hcl
+terraform/environments/*/.build/
+crash.log
+
+# Lambda build output
+lambda/*/node_modules/
+lambda/*/build/

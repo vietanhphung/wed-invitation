@@ -1,0 +1,143 @@
+# Gallery infrastructure CI.
+#   Pull requests / pushes: fmt, validate, Lambda + signer tests, security scan (no AWS access).
+#   Plan: runs when the repository variable AWS_PLAN_ROLE_ARN is set (read-only OIDC role).
+#   Apply: ONLY by manual "Run workflow" on main, through the "production" environment
+#          (add required reviewers in Settings → Environments), and refuses destroy/replace.
+name: infra
+
+on:
+  pull_request:
+    paths: ["terraform/**", "lambda/**", "scripts/**", "intimate/gallery/**", ".github/workflows/infra.yml"]
+  push:
+    branches: [main]
+    paths: ["terraform/**", "lambda/**", "scripts/**", "intimate/gallery/**", ".github/workflows/infra.yml"]
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Apply the production plan (requires environment approval)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: infra-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  TF_VERSION: "1.11.4"
+  TF_IN_AUTOMATION: "1"
+  TF_DIR: terraform/environments/production
+  # terraform.tfvars is not in git; CI gets the same values from repository settings
+  # (Settings -> Secrets and variables -> Actions), so plans match local ones.
+  TF_VAR_admin_emails: ${{ vars.TF_ADMIN_EMAILS || '[]' }}
+  TF_VAR_alarm_email: ${{ secrets.TF_ALARM_EMAIL }}
+  TF_VAR_aws_region: ${{ vars.AWS_REGION || 'us-east-2' }}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
+      - name: terraform fmt
+        run: terraform fmt -check -recursive -diff terraform
+      - name: terraform validate
+        run: |
+          for d in terraform/bootstrap "$TF_DIR"; do
+            terraform -chdir="$d" init -backend=false -input=false >/dev/null
+            terraform -chdir="$d" validate
+          done
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: lambda/image-processor/package-lock.json
+      - name: Lambda + browser signer tests
+        working-directory: lambda/image-processor
+        run: npm ci --no-audit --no-fund && npm test
+      - name: Security scan (trivy)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: config
+          scan-ref: terraform
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+      - name: No AWS secrets in the published page
+        run: |
+          if grep -rEn 'AKIA[0-9A-Z]{16}|aws_secret_access_key|SecretAccessKey"?\s*[:=]\s*"[^"]' intimate/gallery; then
+            echo "::error::AWS credentials found in intimate/gallery"; exit 1
+          fi
+
+  plan:
+    needs: validate
+    if: vars.AWS_PLAN_ROLE_ARN != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_PLAN_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-2' }}
+      - name: Build Lambda package
+        run: ./lambda/image-processor/build.sh
+      - name: terraform plan
+        run: |
+          printf 'bucket = "%s"\nregion = "%s"\n' "${{ vars.TF_STATE_BUCKET }}" "${{ vars.AWS_REGION || 'us-east-2' }}" > "$TF_DIR/backend.hcl"
+          terraform -chdir="$TF_DIR" init -input=false -backend-config=backend.hcl
+          terraform -chdir="$TF_DIR" plan -input=false -lock-timeout=2m -out=tfplan
+          terraform -chdir="$TF_DIR" show -json tfplan > tfplan.json
+      - name: Plan summary / destroy guard
+        run: |
+          rc=0; python3 scripts/plan_guard.py tfplan.json --markdown > plan.md || rc=$?
+          { echo "## Terraform plan (production)"; cat plan.md; } >> "$GITHUB_STEP_SUMMARY"
+          cat plan.md
+          [ "$rc" != 1 ]
+
+  apply:
+    needs: plan
+    if: github.event_name == 'workflow_dispatch' && inputs.apply && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_APPLY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-2' }}
+      - name: Build Lambda package
+        run: ./lambda/image-processor/build.sh
+      - name: Plan, guard, apply
+        run: |
+          printf 'bucket = "%s"\nregion = "%s"\n' "${{ vars.TF_STATE_BUCKET }}" "${{ vars.AWS_REGION || 'us-east-2' }}" > "$TF_DIR/backend.hcl"
+          terraform -chdir="$TF_DIR" init -input=false -backend-config=backend.hcl
+          terraform -chdir="$TF_DIR" plan -input=false -out=tfplan
+          terraform -chdir="$TF_DIR" show -json tfplan > tfplan.json
+          rc=0; python3 scripts/plan_guard.py tfplan.json || rc=$?
+          if [ "$rc" = 1 ]; then echo "::error::Plan destroys/replaces resources — apply locally after review."; exit 1; fi
+          if [ "$rc" = 0 ]; then terraform -chdir="$TF_DIR" apply -input=false tfplan; fi
+          terraform -chdir="$TF_DIR" output

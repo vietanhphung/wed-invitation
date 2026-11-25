@@ -7,14 +7,19 @@ Hai mẫu thiệp trong cùng một repo, dùng chung ảnh và nhạc:
 | `vietanhphung.com/wed-invitation/traditional/` | **Film & Maple** — tối giản, ảnh màu phim Toronto & Algonquin | `traditional/` |
 | `vietanhphung.com/wed-invitation/countryside/` | **Film & Maple** như traditional — lễ ở quê: 10:00 Thứ Bảy 19.12.2026, TT Văn hóa – Thể thao xã Hát Môn | `countryside/` |
 | `vietanhphung.com/wed-invitation/intimate/` | **Hoa Rum** — tiệc cưới thân mật: phong bì, sáp niêm phong, hoa rum, polaroid, xác nhận tham dự | `intimate/` |
+| `vietanhphung.com/wed-invitation/intimate/gallery/` | **Album chung** — khách gửi ảnh không cần đăng nhập; ảnh lưu trên AWS (xem `terraform/README.md`) | `intimate/gallery/` |
 | `vietanhphung.com/wed-invitation/` | tự chuyển sang `/traditional/` (link cũ vẫn dùng được, giữ cả `?name=`) | `index.html` |
 
 ```
 traditional/   index.html · style.css · config.js · main.js
 intimate/      index.html · style.css · config.js · main.js · calla.svg
+intimate/gallery/  album chung: index.html · main.js · aws.js · gallery.css · config.js (tạo bởi Terraform)
 assets/        photos/ · music/ · qr/   ← dùng chung cho cả hai mẫu
 tools/         photos.py · rebuild_photos.sh
 photos/        ảnh gốc (chỉ ở máy, không đưa lên mạng)
+terraform/     hạ tầng AWS cho album chung (S3, Lambda, Cognito, CloudFront) — terraform/README.md
+lambda/        image-processor: chuyển ảnh khách gửi sang WebP 1600 px
+scripts/       terraform.sh (plan / apply an toàn) · plan_guard.py
 ```
 
 ## Tuỳ chỉnh

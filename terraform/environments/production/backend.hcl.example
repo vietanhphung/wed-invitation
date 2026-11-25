@@ -1,0 +1,3 @@
+# Copy to backend.hcl (gitignored). Values come from `terraform output` in terraform/bootstrap.
+bucket = "wedding-tfstate-123456789012"
+region = "us-east-2"

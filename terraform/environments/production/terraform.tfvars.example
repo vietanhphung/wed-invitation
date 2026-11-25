@@ -1,0 +1,28 @@
+# Copy to terraform.tfvars (gitignored) and adjust. Every value has a sensible default;
+# only admin_emails is needed to be able to log in as admin.
+
+aws_region   = "us-east-2"
+environment  = "production"
+project_name = "wedding"
+domain_name  = "vietanhphung.com"
+gallery_path = "/wed-invitation/intimate/gallery/"
+
+# Local testing with `python3 -m http.server 8000` from the repo root:
+# extra_allowed_origins = ["http://localhost:8000"]
+
+# Admin login(s): Cognito emails each a temporary password.
+admin_emails = ["admin@example.com"]
+
+# Optional alarm emails (confirm the SNS subscription email once).
+# alarm_email = "alerts@example.com"
+
+# Image processing
+max_image_dimension = 1600
+webp_quality        = 80
+max_upload_mb       = 30
+lambda_memory       = 1536
+lambda_timeout      = 60
+
+# Retention
+original_retention_days      = 14
+deleted_photo_retention_days = 30
