@@ -1,8 +1,9 @@
 /* Shared wedding album — used by two pages:
-   intimate/gallery/  (album link)  view-only grid; admin: "Quản trị" -> Cognito login -> delete photos
-   intimate/upload/   (QR code)     upload only: temporary upload-only credentials from the Cognito
-                                    identity pool -> S3 original/<uuid>.<ext> -> Lambda -> gallery/<uuid>.webp
-   The page decides by which elements it contains (#grid / #upload-box). */
+   intimate/gallery/  (album link)  carousel + album grid; admin: "Quản trị" -> Cognito login -> delete
+   intimate/upload/   (QR code)     the same page plus the upload button: temporary upload-only credentials
+                                    from the Cognito identity pool -> S3 original/<uuid>.<ext>
+                                    -> Lambda -> gallery/<uuid>.webp
+   What runs depends on which elements the page contains (see "start" below). */
 import { signS3, getCredentials, startLogin, finishLogin, logoutUrl, tokenExpiry } from './aws.js';
 
 const C = window.GALLERY || {};
@@ -136,7 +137,6 @@ async function uploadAll(files) {
     skipped ? `${skipped} tệp bị bỏ qua (không phải ảnh hoặc quá ${C.maxUploadMb} MB).` : ''
   ].filter(Boolean).join(' '));
   if (done && $('#grid')) pollAfterUpload(photos.length + done);
-  if (done && $('#after-upload')) $('#after-upload').hidden = false;
   if (done && $('#carousel')) [8e3, 20e3].forEach(t => setTimeout(loadCarousel, t)); // show their photo once processed
 }
 
@@ -281,43 +281,48 @@ function setupCarousel() {
   setInterval(() => { if (document.visibilityState === 'visible') loadCarousel(); }, 30e3);
 }
 
-/* ---------- start ---------- */
-async function initUpload() {
+/* ---------- start ----------
+   Each part runs only if the page contains it:
+     #carousel   newest photos (both pages)
+     #grid       full album + lightbox (both pages)
+     #upload-box upload button (upload page only)
+     #login-btn  admin login / delete (album page only — its URL is the registered login callback) */
+const NOT_READY = 'Album đang được chuẩn bị, bạn quay lại sau nhé.';
+
+function initUpload() {
   $('#max-mb').textContent = C.maxUploadMb || 30;
-  if ($('#carousel')) setupCarousel();
-  if (!configured) {
-    $('#upload-box').hidden = true;
-    notice('Album đang được chuẩn bị, bạn quay lại sau nhé.');
-    return;
-  }
+  if (!configured) { $('#upload-box').hidden = true; return; }
   $('#file-input').addEventListener('change', e => uploadAll(e.target.files));
+}
+
+async function initAdmin() {
+  if (!adminConfigured) { $('#login-btn').hidden = true; return; }
+  $('#login-btn').hidden = false;
+  $('#login-btn').addEventListener('click', () => startLogin(loginCfg));
+  $('#logout-btn').addEventListener('click', () => { endAdmin(); location.assign(logoutUrl(loginCfg)); });
+  try {
+    const token = await finishLogin(loginCfg) || sessionStorage.getItem('gallery-admin');
+    if (token && tokenExpiry(token) - Date.now() > 60e3) beginAdmin(token);
+    else sessionStorage.removeItem('gallery-admin');
+  } catch (e) {
+    notice(e.message);
+  }
 }
 
 async function initAlbum() {
   setupLightbox();
-  if (!configured) {
-    $('#login-btn').hidden = true;
-    notice('Album đang được chuẩn bị, bạn quay lại sau nhé.');
-    return;
-  }
-  $('#login-btn').hidden = !adminConfigured;
-  $('#login-btn').addEventListener('click', () => startLogin(loginCfg));
-  $('#logout-btn').addEventListener('click', () => { endAdmin(); location.assign(logoutUrl(loginCfg)); });
-
-  if (adminConfigured) {
-    try {
-      const token = await finishLogin(loginCfg) || sessionStorage.getItem('gallery-admin');
-      if (token && tokenExpiry(token) - Date.now() > 60e3) beginAdmin(token);
-      else sessionStorage.removeItem('gallery-admin');
-    } catch (e) {
-      notice(e.message);
-    }
-  }
-
+  if (!configured) return;
   await refresh();
   render();
   setInterval(() => { if (document.visibilityState === 'visible') refresh(); }, 30e3);
 }
 
-if ($('#upload-box')) initUpload();
-if ($('#grid')) initAlbum();
+async function init() {
+  if (!configured) notice(NOT_READY);
+  if ($('#carousel')) setupCarousel();
+  if ($('#upload-box')) initUpload();
+  if ($('#login-btn')) await initAdmin(); // before the grid renders, so delete buttons appear
+  if ($('#grid')) await initAlbum();
+}
+
+init();
