@@ -2,17 +2,17 @@
    These are public identifiers (the browser needs them); there are no secrets here.
    While empty, the page shows "Album đang được chuẩn bị". */
 window.GALLERY = {
-  "region": "",
-  "identityPoolId": "",
-  "bucket": "",
-  "cdnDomain": "",
+  "region": "us-east-2",
+  "identityPoolId": "us-east-2:63e35303-688a-43e5-b4da-74ee807b4126",
+  "bucket": "wedding-production-gallery-photos-813095727808",
+  "cdnDomain": "d2vt0489ftrnpk.cloudfront.net",
   "originalPrefix": "original/",
   "photoPrefix": "gallery/",
   "maxUploadMb": 30,
-  "galleryUrl": "",
+  "galleryUrl": "https://vietanhphung.com/wed-invitation/intimate/gallery/",
   "cognito": {
-    "domain": "",
-    "clientId": "",
-    "userPoolId": ""
+    "domain": "wedding-production-gallery-813095727808.auth.us-east-2.amazoncognito.com",
+    "clientId": "ehhnbuuo657on2lii0rrvtgkt",
+    "userPoolId": "us-east-2_dZ1DMxoBt"
   }
 };
