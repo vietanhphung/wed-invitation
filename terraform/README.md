@@ -1,8 +1,15 @@
 # Wedding photo gallery — AWS infrastructure
 
-Guests upload photos at **https://vietanhphung.com/wed-invitation/intimate/gallery/** without
-logging in; a Lambda turns each upload into a 1600 px WebP; everyone sees the shared album;
-the admin can log in and delete photos.
+Guests scan the QR code at the venue (`assets/qr/upload.png`) to reach the upload page
+**https://vietanhphung.com/wed-invitation/intimate/upload/** and upload without logging in;
+a Lambda turns each upload into a 1600 px WebP; the album link
+**https://vietanhphung.com/wed-invitation/intimate/gallery/** is view-only; the admin can log in
+there and delete photos.
+
+Note: the upload page is unlisted (noindex, not linked from the album), not secret. Uploads use
+the identity pool's guest credentials, which anyone who knows the URL can obtain. That is the
+accepted trade-off for login-free uploads; abuse is bounded by the processor (images only,
+`max_upload_mb`) and admin delete.
 
 ```
 GitHub Pages (unchanged)                         AWS (this Terraform)

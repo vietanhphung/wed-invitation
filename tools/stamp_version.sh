@@ -5,7 +5,7 @@
 set -e
 cd "$(dirname "$0")/.."
 v=$(date +%Y%m%d%H%M%S)
-for page in traditional/index.html countryside/index.html intimate/index.html intimate/gallery/index.html; do
+for page in traditional/index.html countryside/index.html intimate/index.html intimate/gallery/index.html intimate/upload/index.html; do
   sed -i.bak -E "s/(style\.css|intimate\.css|gallery\.css|config\.js|main\.js)(\?v=[0-9]+)?\"/\1?v=$v\"/g" "$page" && rm -f "$page.bak"
   git add "$page" 2>/dev/null || true
 done

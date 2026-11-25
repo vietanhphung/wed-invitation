@@ -36,9 +36,9 @@
     "semantic_hash": ""
   },
   "tools/stamp_version.sh": {
-    "mtime": 1795627455.103603,
-    "seen": 1795627548.195623,
-    "ast_hash": "c2684eb083dc13cfaa3f71190c9c042e",
+    "mtime": 1795650231.2378476,
+    "seen": 1795650272.318945,
+    "ast_hash": "7a173e3b9f123e8640db60daa0283d1f",
     "semantic_hash": ""
   },
   "traditional/config.js": {
@@ -54,9 +54,9 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1795627504.9128802,
-    "seen": 1795627548.195667,
-    "ast_hash": "ce118660ae5b55381da8ec7ff869f661",
+    "mtime": 1795650270.8107746,
+    "seen": 1795650272.318992,
+    "ast_hash": "0193ae8d3895378b56f3f7a782e40998",
     "semantic_hash": ""
   },
   "index.html": {
@@ -66,15 +66,15 @@
     "semantic_hash": ""
   },
   "intimate/index.html": {
-    "mtime": 1795627460.2607312,
-    "seen": 1795627548.19577,
-    "ast_hash": "2e4bacd80cba3946ca9286bb35d6495d",
+    "mtime": 1795649470.7329497,
+    "seen": 1795650272.3190138,
+    "ast_hash": "9ebbfbdc67e6f29f821a683ebfa117de",
     "semantic_hash": ""
   },
   "traditional/index.html": {
-    "mtime": 1795627460.2609806,
-    "seen": 1795627548.195773,
-    "ast_hash": "77e1331138e3185cf6cabf447c28f2c0",
+    "mtime": 1795649470.6903505,
+    "seen": 1795650272.31902,
+    "ast_hash": "8c6193ad2c4da23d2bdf06e987cd0996",
     "semantic_hash": ""
   },
   "assets/icons/apple-touch-icon.png": {
@@ -312,15 +312,15 @@
     "semantic_hash": ""
   },
   "countryside/index.html": {
-    "mtime": 1795627460.2602656,
-    "seen": 1795627548.195668,
-    "ast_hash": "56353e628319a1682724be788b6dd8fa",
+    "mtime": 1795649470.712821,
+    "seen": 1795650272.3189929,
+    "ast_hash": "8a005fb5e883cd62bf7e1c2a5e1d1e7a",
     "semantic_hash": ""
   },
   ".github/workflows/infra.yml": {
-    "mtime": 1795648105.7774284,
-    "seen": 1795648116.87067,
-    "ast_hash": "4a879a3753ef8c876d199e87b7fd0fa2",
+    "mtime": 1795650233.6455882,
+    "seen": 1795650272.318487,
+    "ast_hash": "fde42d287eaca8e9e101dd8fcf340ff0",
     "semantic_hash": ""
   },
   "intimate/gallery/aws.js": {
@@ -330,15 +330,15 @@
     "semantic_hash": ""
   },
   "intimate/gallery/config.js": {
-    "mtime": 1795627448.7833374,
-    "seen": 1795627548.195502,
-    "ast_hash": "be7dffe462fd7c2a6cff9b03e19aac98",
+    "mtime": 1795649381.541929,
+    "seen": 1795650272.318663,
+    "ast_hash": "68b16ff9906a3f3cc34dfa977a2b563f",
     "semantic_hash": ""
   },
   "intimate/gallery/main.js": {
-    "mtime": 1795627107.870948,
-    "seen": 1795627548.195503,
-    "ast_hash": "3e1f1e446df4ec868018c4d8f9bbaf89",
+    "mtime": 1795650359.2433891,
+    "seen": 1795650362.750346,
+    "ast_hash": "9c77c983707228079b18e61f2a6abad2",
     "semantic_hash": ""
   },
   "lambda/image-processor/build.sh": {
@@ -360,9 +360,9 @@
     "semantic_hash": ""
   },
   "lambda/image-processor/package.json": {
-    "mtime": 1795627346.5916977,
-    "seen": 1795627548.195532,
-    "ast_hash": "cac0a16b656452b4b566a008e61301ac",
+    "mtime": 1795650160.535026,
+    "seen": 1795650272.318762,
+    "ast_hash": "b423992e06e627833686948ea9feae4a",
     "semantic_hash": ""
   },
   "lambda/image-processor/test/lib.test.mjs": {
@@ -390,15 +390,33 @@
     "semantic_hash": ""
   },
   "intimate/gallery/index.html": {
-    "mtime": 1795627455.217691,
-    "seen": 1795627548.195768,
-    "ast_hash": "efefe66552b16d2260a6de6273bad6e6",
+    "mtime": 1795650215.1056662,
+    "seen": 1795650272.3190122,
+    "ast_hash": "6b24df0a884947da62178ecddc37abc0",
     "semantic_hash": ""
   },
   "terraform/README.md": {
-    "mtime": 1795648105.817731,
-    "seen": 1795648116.871836,
-    "ast_hash": "ff77d132d04e6710f6a71eb02de4cd4b",
+    "mtime": 1795650270.8112636,
+    "seen": 1795650272.319017,
+    "ast_hash": "09de0ca180e9c6e2b63b14ead56e0431",
+    "semantic_hash": ""
+  },
+  "intimate/upload/index.html": {
+    "mtime": 1795650295.0367765,
+    "seen": 1795650362.7508411,
+    "ast_hash": "6d9dea0801b08143b19252ef32ab705d",
+    "semantic_hash": ""
+  },
+  "assets/qr/upload.png": {
+    "mtime": 1795650244.8566766,
+    "seen": 1795650272.319818,
+    "ast_hash": "f80c3ff88740dc9ec9fad34d26fb4693",
+    "semantic_hash": ""
+  },
+  "assets/qr/upload.svg": {
+    "mtime": 1795650244.8574183,
+    "seen": 1795650272.319819,
+    "ast_hash": "28f104a0b5a03d24a9fd2d8e85ea7050",
     "semantic_hash": ""
   },
   "lambda/image-processor/package-lock.json": {

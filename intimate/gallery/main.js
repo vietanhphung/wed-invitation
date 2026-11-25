@@ -1,8 +1,8 @@
-/* Shared wedding album.
-   Guests: no login — temporary upload-only credentials from the Cognito identity pool,
-           files go to S3 original/<uuid>.<ext>; the Lambda turns them into gallery/<uuid>.webp.
-   Everyone: photos are read from CloudFront (gallery/index.json + the WebP files).
-   Admin: "Quản trị" -> Cognito hosted login -> admin credentials -> delete photos. */
+/* Shared wedding album — used by two pages:
+   intimate/gallery/  (album link)  view-only grid; admin: "Quản trị" -> Cognito login -> delete photos
+   intimate/upload/   (QR code)     upload only: temporary upload-only credentials from the Cognito
+                                    identity pool -> S3 original/<uuid>.<ext> -> Lambda -> gallery/<uuid>.webp
+   The page decides by which elements it contains (#grid / #upload-box). */
 import { signS3, getCredentials, startLogin, finishLogin, logoutUrl, tokenExpiry } from './aws.js';
 
 const C = window.GALLERY || {};
@@ -135,7 +135,9 @@ async function uploadAll(files) {
     failed ? `${failed} ảnh chưa gửi được, bạn thử lại nhé.` : '',
     skipped ? `${skipped} tệp bị bỏ qua (không phải ảnh hoặc quá ${C.maxUploadMb} MB).` : ''
   ].filter(Boolean).join(' '));
-  if (done) pollAfterUpload(photos.length + done);
+  if (done && $('#grid')) pollAfterUpload(photos.length + done);
+  if (done && $('#after-upload')) $('#after-upload').hidden = false;
+  if (done && $('#carousel')) [8e3, 20e3].forEach(t => setTimeout(loadCarousel, t)); // show their photo once processed
 }
 
 // Processing takes a few seconds per photo; check more often for a minute.
@@ -210,18 +212,95 @@ function setupLightbox() {
   });
 }
 
+/* ---------- carousel (upload page) ----------
+   Newest guest photos from the album; the couple's photos (data-fallback) until there are some.
+   Native scroll-snap does the swiping; a timer advances it unless the guest is interacting
+   or prefers reduced motion. */
+const CAROUSEL_MAX = 12;
+let carouselKeys = '';
+let carouselTimer = null;
+
+async function loadCarousel() {
+  const box = $('#carousel');
+  const list = configured ? await loadManifest() : null;
+  const urls = list && list.length
+    ? list.slice(0, CAROUSEL_MAX).map(p => `${cdn}/${p.key}`)
+    : box.dataset.fallback.trim().split(/\s+/);
+  const keys = urls.join('|');
+  if (keys === carouselKeys) return; // unchanged: keep the guest's position
+  carouselKeys = keys;
+
+  const track = $('#carousel-track');
+  const dots = $('#carousel-dots');
+  track.replaceChildren(...urls.map((src, i) => {
+    const li = make('li', { className: 'g-slide' });
+    li.setAttribute('aria-roledescription', 'slide');
+    li.setAttribute('aria-label', `${i + 1} / ${urls.length}`);
+    li.appendChild(make('img', { src, alt: '', loading: i < 2 ? 'eager' : 'lazy', decoding: 'async' }));
+    return li;
+  }));
+  dots.replaceChildren(...urls.map(() => make('i')));
+  track.scrollLeft = 0;
+  markDot();
+}
+
+function slideStep() {
+  const s = $('#carousel-track .g-slide');
+  return s ? s.getBoundingClientRect().width + parseFloat(getComputedStyle($('#carousel-track')).columnGap || 0) : 0;
+}
+const atEnd = t => t.scrollLeft + t.clientWidth >= t.scrollWidth - 2;
+function currentSlide() {
+  const t = $('#carousel-track'), step = slideStep();
+  if (!step) return 0;
+  return atEnd(t) ? t.children.length - 1 : Math.round(t.scrollLeft / step); // last slides can't snap to start
+}
+function markDot() {
+  const i = currentSlide();
+  [...$('#carousel-dots').children].forEach((d, j) => d.classList.toggle('on', j === i));
+}
+
+function setupCarousel() {
+  const track = $('#carousel-track');
+  let paused = false, resume;
+  const pause = () => { paused = true; clearTimeout(resume); resume = setTimeout(() => { paused = false; }, 6000); };
+  ['pointerdown', 'touchstart', 'wheel', 'focusin'].forEach(ev => track.addEventListener(ev, pause, { passive: true }));
+  track.addEventListener('scroll', () => requestAnimationFrame(markDot), { passive: true });
+  track.addEventListener('scrollend', markDot); // final position (also where rAF is throttled)
+
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    carouselTimer = setInterval(() => {
+      if (paused || document.visibilityState !== 'visible') return;
+      const n = track.children.length;
+      if (n < 2) return;
+      const next = atEnd(track) ? 0 : currentSlide() + 1;
+      track.scrollTo({ left: next * slideStep(), behavior: next ? 'smooth' : 'auto' });
+      setTimeout(markDot, 700); // browsers without scrollend
+    }, 3500);
+  }
+  loadCarousel();
+  setInterval(() => { if (document.visibilityState === 'visible') loadCarousel(); }, 30e3);
+}
+
 /* ---------- start ---------- */
-async function init() {
+async function initUpload() {
   $('#max-mb').textContent = C.maxUploadMb || 30;
-  setupLightbox();
+  if ($('#carousel')) setupCarousel();
   if (!configured) {
     $('#upload-box').hidden = true;
+    notice('Album đang được chuẩn bị, bạn quay lại sau nhé.');
+    return;
+  }
+  $('#file-input').addEventListener('change', e => uploadAll(e.target.files));
+}
+
+async function initAlbum() {
+  setupLightbox();
+  if (!configured) {
     $('#login-btn').hidden = true;
     notice('Album đang được chuẩn bị, bạn quay lại sau nhé.');
     return;
   }
   $('#login-btn').hidden = !adminConfigured;
-  $('#file-input').addEventListener('change', e => uploadAll(e.target.files));
   $('#login-btn').addEventListener('click', () => startLogin(loginCfg));
   $('#logout-btn').addEventListener('click', () => { endAdmin(); location.assign(logoutUrl(loginCfg)); });
 
@@ -240,4 +319,5 @@ async function init() {
   setInterval(() => { if (document.visibilityState === 'visible') refresh(); }, 30e3);
 }
 
-init();
+if ($('#upload-box')) initUpload();
+if ($('#grid')) initAlbum();
