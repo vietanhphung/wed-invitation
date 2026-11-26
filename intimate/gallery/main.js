@@ -212,13 +212,15 @@ function setupLightbox() {
   });
 }
 
-/* ---------- carousel (upload page) ----------
-   Newest guest photos from the album; the couple's photos (data-fallback) until there are some.
-   Native scroll-snap does the swiping; a timer advances it unless the guest is interacting
-   or prefers reduced motion. */
+/* ---------- carousel (both pages) ----------
+   A continuously moving film strip: newest guest photos, or the couple's photos (data-fallback)
+   until there are some. The list is repeated to fill wide screens, then doubled; CSS slides the
+   track left by exactly half its width in a loop, so the seam is invisible. Pauses on hover /
+   while touched; stands still (and becomes swipeable) with prefers-reduced-motion. */
 const CAROUSEL_MAX = 12;
+const CAROUSEL_MIN = 8;        // fill wide screens even with few photos
+const SECONDS_PER_PHOTO = 4;   // speed
 let carouselKeys = '';
-let carouselTimer = null;
 
 async function loadCarousel() {
   const box = $('#carousel');
@@ -227,56 +229,27 @@ async function loadCarousel() {
     ? list.slice(0, CAROUSEL_MAX).map(p => `${cdn}/${p.key}`)
     : box.dataset.fallback.trim().split(/\s+/);
   const keys = urls.join('|');
-  if (keys === carouselKeys) return; // unchanged: keep the guest's position
+  if (keys === carouselKeys) return; // unchanged: don't restart the motion
   carouselKeys = keys;
 
+  const base = [];
+  while (base.length < Math.max(CAROUSEL_MIN, urls.length)) base.push(...urls);
   const track = $('#carousel-track');
-  const dots = $('#carousel-dots');
-  track.replaceChildren(...urls.map((src, i) => {
+  track.replaceChildren(...[...base, ...base].map((src, i) => {
     const li = make('li', { className: 'g-slide' });
-    li.setAttribute('aria-roledescription', 'slide');
-    li.setAttribute('aria-label', `${i + 1} / ${urls.length}`);
-    li.appendChild(make('img', { src, alt: '', loading: i < 2 ? 'eager' : 'lazy', decoding: 'async' }));
+    if (i >= urls.length) li.setAttribute('aria-hidden', 'true'); // repeats are decoration
+    li.appendChild(make('img', { src, alt: '', loading: i < 4 ? 'eager' : 'lazy', decoding: 'async' }));
     return li;
   }));
-  dots.replaceChildren(...urls.map(() => make('i')));
-  track.scrollLeft = 0;
-  markDot();
-}
-
-function slideStep() {
-  const s = $('#carousel-track .g-slide');
-  return s ? s.getBoundingClientRect().width + parseFloat(getComputedStyle($('#carousel-track')).columnGap || 0) : 0;
-}
-const atEnd = t => t.scrollLeft + t.clientWidth >= t.scrollWidth - 2;
-function currentSlide() {
-  const t = $('#carousel-track'), step = slideStep();
-  if (!step) return 0;
-  return atEnd(t) ? t.children.length - 1 : Math.round(t.scrollLeft / step); // last slides can't snap to start
-}
-function markDot() {
-  const i = currentSlide();
-  [...$('#carousel-dots').children].forEach((d, j) => d.classList.toggle('on', j === i));
+  track.style.setProperty('--marquee-duration', `${base.length * SECONDS_PER_PHOTO}s`);
 }
 
 function setupCarousel() {
   const track = $('#carousel-track');
-  let paused = false, resume;
-  const pause = () => { paused = true; clearTimeout(resume); resume = setTimeout(() => { paused = false; }, 6000); };
-  ['pointerdown', 'touchstart', 'wheel', 'focusin'].forEach(ev => track.addEventListener(ev, pause, { passive: true }));
-  track.addEventListener('scroll', () => requestAnimationFrame(markDot), { passive: true });
-  track.addEventListener('scrollend', markDot); // final position (also where rAF is throttled)
-
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    carouselTimer = setInterval(() => {
-      if (paused || document.visibilityState !== 'visible') return;
-      const n = track.children.length;
-      if (n < 2) return;
-      const next = atEnd(track) ? 0 : currentSlide() + 1;
-      track.scrollTo({ left: next * slideStep(), behavior: next ? 'smooth' : 'auto' });
-      setTimeout(markDot, 700); // browsers without scrollend
-    }, 3500);
-  }
+  const hold = () => track.classList.add('paused');
+  const release = () => track.classList.remove('paused');
+  track.addEventListener('pointerdown', hold);
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => track.addEventListener(ev, release));
   loadCarousel();
   setInterval(() => { if (document.visibilityState === 'visible') loadCarousel(); }, 30e3);
 }

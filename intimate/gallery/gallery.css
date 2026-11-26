@@ -8,19 +8,17 @@
 .g-main{max-width:1240px;margin:0 auto;padding:clamp(40px,8vw,96px) var(--gutter) clamp(56px,8vw,110px)}
 .g-intro{max-width:34em;margin:0;font:italic 400 clamp(1.05rem,1.6vw,1.2rem)/1.6 var(--serif);color:var(--ink-soft)}
 
-/* carousel on the upload page (above the upload button) */
-.g-carousel{margin:clamp(32px,5vw,52px) calc(var(--gutter) * -1) 0}
-.g-track{display:flex;column-gap:12px;margin:0;padding:0 var(--gutter);list-style:none;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 var(--gutter);scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.g-track::-webkit-scrollbar{display:none}
-.g-slide{flex:0 0 min(72%,340px);aspect-ratio:4/5;overflow:hidden;background:var(--beige);scroll-snap-align:start}
-.g-slide img{display:block;width:100%;height:100%;object-fit:cover}
-.g-dots{display:flex;justify-content:center;gap:7px;margin-top:16px}
-.g-dots i{width:6px;height:6px;border-radius:50%;background:var(--sand);transition:background .3s,transform .3s}
-.g-dots i.on{background:var(--brown);transform:scale(1.25)}
-@media (min-width:961px){
-  .g-carousel{margin-left:0;margin-right:0}
-  .g-track{padding:0;scroll-padding:0}
-  .g-slide{flex-basis:calc((100% - 24px) / 3)}
+/* carousel: continuously moving film strip (both pages) */
+.g-carousel{margin:clamp(32px,5vw,52px) calc(var(--gutter) * -1) 0;overflow:hidden}
+.g-track{display:flex;width:max-content;margin:0;padding:0;list-style:none;animation:g-marquee var(--marquee-duration,40s) linear infinite}
+.g-carousel:hover .g-track,.g-track.paused{animation-play-state:paused}
+/* margin (not gap) so the doubled list is exactly twice one copy -> seamless at -50% */
+.g-slide{flex:0 0 auto;width:clamp(200px,58vw,300px);aspect-ratio:4/5;margin-right:12px;overflow:hidden;background:var(--beige)}
+.g-slide img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none}
+@keyframes g-marquee{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){
+  .g-carousel{overflow-x:auto;scrollbar-width:none}
+  .g-track{animation:none}
 }
 
 .g-upload{display:flex;flex-direction:column;align-items:center;gap:12px;margin:clamp(36px,5vw,56px) 0 0;text-align:center}
