@@ -61,3 +61,14 @@ variable "tags" {
   type    = map(string)
   default = {}
 }
+
+variable "thumb_dimension" {
+  description = "Shortest side of grid/carousel thumbnails, px."
+  type        = number
+  default     = 480
+}
+
+variable "thumb_quality" {
+  type    = number
+  default = 70
+}

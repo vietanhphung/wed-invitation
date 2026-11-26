@@ -86,5 +86,7 @@ module "image_processor" {
   timeout             = var.lambda_timeout
   max_image_dimension = var.max_image_dimension
   webp_quality        = var.webp_quality
+  thumb_dimension     = var.thumb_dimension
+  thumb_quality       = var.thumb_quality
   max_upload_mb       = var.max_upload_mb
 }

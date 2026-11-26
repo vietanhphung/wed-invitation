@@ -59,32 +59,85 @@ async function loadManifest() {
   }
 }
 
-function render() {
-  const grid = $('#grid');
-  grid.replaceChildren(...photos.map((p, i) => {
-    const li = make('li', { className: 'g-tile' });
-    const btn = make('button', { type: 'button', className: 'g-open', ariaLabel: `Xem ảnh ${i + 1}` });
-    btn.appendChild(make('img', { src: `${cdn}/${p.key}`, alt: '', loading: 'lazy', decoding: 'async' }));
-    btn.addEventListener('click', () => openLightbox(i));
-    li.appendChild(btn);
-    if (idToken) {
-      const del = make('button', { type: 'button', className: 'g-del', ariaLabel: 'Xoá ảnh', textContent: 'Xoá' });
-      del.addEventListener('click', () => removePhoto(p, li, del));
-      li.appendChild(del);
-    }
-    return li;
-  }));
+/* Album grid: thumbnails, shown in batches, updated in place.
+   - Tiles use gallery/thumb/<id>.webp (~20-40 KB); the lightbox opens the 1600 px photo.
+   - Only BATCH tiles are built at first; more are appended as the guest nears the bottom.
+   - On refresh, new photos are prepended and deleted ones removed — nothing else is rebuilt,
+     so scrolling and loaded images are not disturbed during the party. */
+const BATCH = 60;
+const tiles = new Map(); // key -> <li>, always the first tiles.size photos of `photos`
+const thumbUrl = p => `${cdn}/${p.thumb || p.key}`;
+
+function tile(p) {
+  const li = make('li', { className: 'g-tile' });
+  li.dataset.key = p.key;
+  const btn = make('button', { type: 'button', className: 'g-open', ariaLabel: 'Xem ảnh' });
+  const img = make('img', { src: thumbUrl(p), alt: '', loading: 'lazy', decoding: 'async' });
+  img.addEventListener('error', () => { if (img.src !== `${cdn}/${p.key}`) img.src = `${cdn}/${p.key}`; }, { once: true });
+  btn.appendChild(img);
+  btn.addEventListener('click', () => openLightbox(photos.findIndex(x => x.key === p.key)));
+  li.appendChild(btn);
+  if (idToken) {
+    const del = make('button', { type: 'button', className: 'g-del', ariaLabel: 'Xoá ảnh', textContent: 'Xoá' });
+    del.addEventListener('click', () => removePhoto(p, li, del));
+    li.appendChild(del);
+  }
+  tiles.set(p.key, li);
+  return li;
+}
+
+function updateMeta() {
   $('#empty').hidden = photos.length > 0;
   $('#photo-count').textContent = photos.length ? `· ${photos.length}` : '';
+}
+
+// Full rebuild: first load, entering/leaving admin mode. Keeps how far the guest had scrolled.
+function render() {
+  const count = Math.min(Math.max(tiles.size, BATCH), photos.length);
+  tiles.clear();
+  $('#grid').replaceChildren(...photos.slice(0, count).map(tile));
+  updateMeta();
+}
+
+function showMore() {
+  const next = photos.slice(tiles.size, tiles.size + BATCH);
+  if (next.length) $('#grid').append(...next.map(tile));
+}
+
+// Incremental update from a fresh manifest.
+function update(list) {
+  const keep = new Set(list.map(p => p.key));
+  for (const [key, li] of tiles) if (!keep.has(key)) { li.remove(); tiles.delete(key); }
+  const known = new Set(photos.map(p => p.key));
+  const added = list.filter(p => !known.has(p.key)); // newest first, so they go on top
+  photos = list;
+  const grid = $('#grid');
+  for (const p of [...added].reverse()) grid.prepend(tile(p));
+  for (const p of list) { // thumbnails that appeared later (backfill)
+    const img = p.thumb && tiles.get(p.key)?.querySelector('img');
+    if (img && img.src.endsWith(p.key)) img.src = thumbUrl(p);
+  }
+  updateMeta();
+  return added.length > 0;
 }
 
 async function refresh() {
   const list = await loadManifest();
   if (!list) return false;
-  const changed = list.length !== photos.length || list.some((p, i) => p.key !== photos[i]?.key);
-  photos = list;
-  if (changed) render();
-  return changed;
+  if (!tiles.size && !photos.length) { photos = list; render(); return list.length > 0; }
+  return update(list);
+}
+
+// Append the next batch when the guest scrolls near the end of what is built.
+function setupInfiniteScroll() {
+  const sentinel = make('div', { className: 'g-more' });
+  sentinel.setAttribute('aria-hidden', 'true');
+  $('#grid').after(sentinel);
+  const near = () => sentinel.getBoundingClientRect().top < innerHeight + 1200;
+  const fill = () => { while (tiles.size < photos.length && near()) showMore(); };
+  new IntersectionObserver(entries => { if (entries.some(e => e.isIntersecting)) fill(); },
+    { rootMargin: '1200px 0px' }).observe(sentinel);
+  addEventListener('resize', fill, { passive: true });
 }
 
 /* ---------- upload ---------- */
@@ -161,8 +214,10 @@ async function removePhoto(p, li, btn) {
     const res = await fetch(url, { method: 'DELETE', headers });
     if (!res.ok && res.status !== 204) throw new Error(`S3 ${res.status}`);
     photos = photos.filter(x => x.key !== p.key);
+    tiles.delete(p.key);
     li.remove();
-    $('#empty').hidden = photos.length > 0;
+    showMore(); // keep the batch full
+    updateMeta();
   } catch (e) {
     btn.disabled = false;
     if (e.message === 'expired') { endAdmin(); notice('Phiên quản trị đã hết hạn, vui lòng đăng nhập lại.'); }
@@ -227,7 +282,7 @@ async function loadCarousel() {
   const box = $('#carousel');
   const list = configured ? await loadManifest() : null;
   const urls = list && list.length
-    ? list.slice(0, CAROUSEL_MAX).map(p => `${cdn}/${p.key}`)
+    ? list.slice(0, CAROUSEL_MAX).map(thumbUrl)
     : box.dataset.fallback.trim().split(/\s+/);
   const keys = urls.join('|');
   if (keys === carouselKeys) return; // unchanged: don't restart the motion
@@ -286,6 +341,7 @@ async function initAdmin() {
 async function initAlbum() {
   setupLightbox();
   if (!configured) return;
+  setupInfiniteScroll();
   await refresh();
   render();
   setInterval(() => { if (document.visibilityState === 'visible') refresh(); }, 30e3);

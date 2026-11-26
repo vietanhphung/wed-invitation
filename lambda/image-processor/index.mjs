@@ -4,12 +4,12 @@
   S3 ObjectCreated  original/<uuid>.<ext>
       -> validate (size, decodable, allowed format)
       -> EXIF orientation, resize to fit MAX_DIMENSION, WebP @ WEBP_QUALITY
-      -> PUT gallery/<uuid>.webp (immutable cache headers)
-      -> HEAD to verify the write
+      -> PUT gallery/<uuid>.webp and gallery/thumb/<uuid>.webp (immutable cache headers)
+      -> HEAD to verify both writes
       -> DELETE the original
       -> rebuild gallery/index.json
   S3 ObjectRemoved  gallery/*.webp (admin delete)
-      -> rebuild gallery/index.json
+      -> delete its thumbnail, rebuild gallery/index.json
 
   Failure handling: transient errors are thrown so S3's async invoke retries; the original stays.
   Invalid uploads (not an image, too large) are logged and left in original/ for the
@@ -19,11 +19,14 @@ import {
   S3Client, GetObjectCommand, PutObjectCommand, HeadObjectCommand,
   DeleteObjectCommand, ListObjectsV2Command
 } from '@aws-sdk/client-s3';
-import { decodeKey, galleryKeyFor, toWebp, buildManifest, InvalidImageError } from './lib.mjs';
+import { decodeKey, galleryKeyFor, toWebp, buildManifest, InvalidImageError, thumbKeyFor, isFullPhoto } from './lib.mjs';
 
 const cfg = {
   originalPrefix: process.env.ORIGINAL_PREFIX || 'original/',
   galleryPrefix: process.env.GALLERY_PREFIX || 'gallery/',
+  thumbPrefix: process.env.THUMB_PREFIX || 'gallery/thumb/',
+  thumbDimension: Number(process.env.THUMB_DIMENSION || 480),
+  thumbQuality: Number(process.env.THUMB_QUALITY || 70),
   manifestKey: process.env.MANIFEST_KEY || 'gallery/index.json',
   maxDimension: Number(process.env.MAX_DIMENSION || 1600),
   quality: Number(process.env.WEBP_QUALITY || 80),
@@ -43,6 +46,10 @@ export async function handler(event) {
     buckets.add(bucket);
     if (record.eventName.startsWith('ObjectCreated') && key.startsWith(cfg.originalPrefix)) {
       await processOriginal(bucket, key);
+    } else if (record.eventName.startsWith('ObjectRemoved') && isFullPhoto(key, cfg)) {
+      const thumb = thumbKeyFor(key, cfg);
+      await s3.send(new DeleteObjectCommand({ Bucket: bucket, Key: thumb })); // no-op if absent
+      log('info', 'photo deleted, thumbnail removed', { key, thumb });
     } else {
       log('info', 'manifest refresh', { event: record.eventName, key });
     }
@@ -83,6 +90,14 @@ async function processOriginal(bucket, key) {
     throw e;
   }
 
+  const thumbKey = thumbKeyFor(target.galleryKey, cfg);
+  await s3.send(new PutObjectCommand({
+    Bucket: bucket,
+    Key: thumbKey,
+    Body: out.thumb,
+    ContentType: 'image/webp',
+    CacheControl: 'public, max-age=31536000, immutable'
+  }));
   await s3.send(new PutObjectCommand({
     Bucket: bucket,
     Key: target.galleryKey,
@@ -92,15 +107,17 @@ async function processOriginal(bucket, key) {
     Metadata: { width: String(out.width), height: String(out.height), source: out.sourceFormat }
   }));
 
-  // Verify before deleting the only other copy.
-  const written = await s3.send(new HeadObjectCommand({ Bucket: bucket, Key: target.galleryKey }));
-  if (written.ContentLength !== out.data.length) {
-    throw new Error(`verification failed for ${target.galleryKey}: ${written.ContentLength} != ${out.data.length}`);
+  // Verify both before deleting the only other copy.
+  for (const [k, body] of [[target.galleryKey, out.data], [thumbKey, out.thumb]]) {
+    const written = await s3.send(new HeadObjectCommand({ Bucket: bucket, Key: k }));
+    if (written.ContentLength !== body.length) {
+      throw new Error(`verification failed for ${k}: ${written.ContentLength} != ${body.length}`);
+    }
   }
 
   await s3.send(new DeleteObjectCommand({ Bucket: bucket, Key: key }));
   log('info', 'processed', {
-    key, galleryKey: target.galleryKey, inBytes: input.length, outBytes: out.data.length,
+    key, galleryKey: target.galleryKey, inBytes: input.length, outBytes: out.data.length, thumbBytes: out.thumb.length,
     width: out.width, height: out.height
   });
 }
@@ -110,7 +127,7 @@ async function processOriginal(bucket, key) {
   Two invocations can race (both list, the older listing writes last), so the write is
   conditional on the manifest's ETag from before the listing; on 412 we list again.
 */
-async function rebuildManifest(bucket, attempt = 1) {
+export async function rebuildManifest(bucket, attempt = 1) {
   let etag;
   try {
     etag = (await s3.send(new HeadObjectCommand({ Bucket: bucket, Key: cfg.manifestKey }))).ETag;

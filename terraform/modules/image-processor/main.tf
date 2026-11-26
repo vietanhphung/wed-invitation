@@ -30,6 +30,9 @@ resource "aws_lambda_function" "processor" {
     variables = {
       ORIGINAL_PREFIX  = var.original_prefix
       GALLERY_PREFIX   = var.gallery_prefix
+      THUMB_PREFIX     = "${var.gallery_prefix}thumb/"
+      THUMB_DIMENSION  = tostring(var.thumb_dimension)
+      THUMB_QUALITY    = tostring(var.thumb_quality)
       MANIFEST_KEY     = "${var.gallery_prefix}index.json"
       MAX_DIMENSION    = tostring(var.max_image_dimension)
       WEBP_QUALITY     = tostring(var.webp_quality)

@@ -142,6 +142,12 @@ data "aws_iam_policy_document" "lambda" {
     actions   = ["s3:PutObject", "s3:GetObject"]
     resources = [local.gallery_arn]
   }
+  # When the admin deletes gallery/<id>.webp, the processor removes its thumbnail.
+  statement {
+    sid       = "RemoveThumbnails"
+    actions   = ["s3:DeleteObject"]
+    resources = ["${var.bucket_arn}/${var.gallery_prefix}thumb/*"]
+  }
   # Unconditioned on purpose: without bucket-level ListBucket, S3 answers HEAD on a missing
   # key (the first manifest, a duplicate event's already-deleted original) with 403, not 404.
   # The bucket holds only this gallery's photos.

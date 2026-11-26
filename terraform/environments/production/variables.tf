@@ -78,6 +78,17 @@ variable "webp_quality" {
   }
 }
 
+variable "thumb_dimension" {
+  description = "Shortest side of the thumbnails used by the album grid and carousel, px."
+  type        = number
+  default     = 480
+}
+
+variable "thumb_quality" {
+  type    = number
+  default = 70
+}
+
 variable "max_upload_mb" {
   description = "Uploads larger than this are rejected by the processor."
   type        = number

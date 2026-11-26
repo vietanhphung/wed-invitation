@@ -26,11 +26,20 @@ export function galleryKeyFor(originalKey, { originalPrefix, galleryPrefix }) {
 /** Permanent problems with the upload itself: retrying will not help. */
 export class InvalidImageError extends Error {}
 
+/** gallery/<id>.webp -> gallery/thumb/<id>.webp */
+export const thumbKeyFor = (galleryKey, { galleryPrefix, thumbPrefix }) =>
+  thumbPrefix + galleryKey.slice(galleryPrefix.length);
+
+/** A full-size gallery photo key (not the manifest, not a thumbnail). */
+export const isFullPhoto = (key, { galleryPrefix }) =>
+  key.startsWith(galleryPrefix) && key.endsWith('.webp') && !key.slice(galleryPrefix.length).includes('/');
+
 /**
- * Validate, auto-orient from EXIF, resize to fit maxDimension x maxDimension (never enlarge)
- * and encode as WebP. EXIF/GPS metadata is dropped (sharp strips it unless withMetadata()).
+ * Validate, auto-orient from EXIF and encode two WebPs (EXIF/GPS metadata is dropped):
+ *   full  — fits maxDimension x maxDimension, never enlarged (lightbox)
+ *   thumb — shortest side thumbDimension, so a square-ish cover crop stays sharp (grid, carousel)
  */
-export async function toWebp(input, { maxDimension, quality }) {
+export async function toWebp(input, { maxDimension, quality, thumbDimension = 480, thumbQuality = 70 }) {
   let meta;
   try {
     meta = await sharp(input, { failOn: 'error' }).metadata();
@@ -41,22 +50,35 @@ export async function toWebp(input, { maxDimension, quality }) {
     throw new InvalidImageError(`unsupported format: ${meta.format}`);
   }
   try {
-    const { data, info } = await sharp(input, { failOn: 'error', animated: false })
-      .rotate() // apply EXIF orientation, then drop the tag
-      .resize(maxDimension, maxDimension, { fit: 'inside', withoutEnlargement: true })
-      .webp({ quality })
-      .toBuffer({ resolveWithObject: true });
-    return { data, width: info.width, height: info.height, sourceFormat: meta.format };
+    const upright = sharp(input, { failOn: 'error', animated: false }).rotate(); // EXIF orientation
+    const [full, thumb] = await Promise.all([
+      upright.clone()
+        .resize(maxDimension, maxDimension, { fit: 'inside', withoutEnlargement: true })
+        .webp({ quality })
+        .toBuffer({ resolveWithObject: true }),
+      upright.clone()
+        .resize(thumbDimension, thumbDimension, { fit: 'outside', withoutEnlargement: true })
+        .webp({ quality: thumbQuality })
+        .toBuffer({ resolveWithObject: true })
+    ]);
+    return {
+      data: full.data, width: full.info.width, height: full.info.height,
+      thumb: thumb.data, sourceFormat: meta.format
+    };
   } catch (e) {
     throw new InvalidImageError(`could not convert image: ${e.message}`);
   }
 }
 
-/** Manifest consumed by the gallery page: newest first. */
-export function buildManifest(objects, { galleryPrefix }) {
+/** Manifest consumed by the gallery page: newest first; `thumb` when a thumbnail exists. */
+export function buildManifest(objects, { galleryPrefix, thumbPrefix }) {
+  const thumbs = new Set(objects.filter(o => o.Key.startsWith(thumbPrefix)).map(o => o.Key));
   const photos = objects
-    .filter(o => o.Key.startsWith(galleryPrefix) && o.Key.endsWith('.webp'))
+    .filter(o => isFullPhoto(o.Key, { galleryPrefix }))
     .sort((a, b) => new Date(b.LastModified) - new Date(a.LastModified))
-    .map(o => ({ key: o.Key, t: new Date(o.LastModified).toISOString() }));
+    .map(o => {
+      const thumb = thumbKeyFor(o.Key, { galleryPrefix, thumbPrefix });
+      return { key: o.Key, ...(thumbs.has(thumb) ? { thumb } : {}), t: new Date(o.LastModified).toISOString() };
+    });
   return { updated: new Date().toISOString(), count: photos.length, photos };
 }

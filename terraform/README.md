@@ -157,6 +157,19 @@ Security (with guest credentials, e.g. from the browser dev tools network tab):
   apply needs explicit approval. It uses `AWS_APPLY_ROLE_ARN` and refuses destroy/replace.
 * PRs never apply.
 
+## Thumbnails
+
+The processor writes two files per photo: `gallery/<id>.webp` (≤1600 px, opened in the viewer)
+and `gallery/thumb/<id>.webp` (shortest side `thumb_dimension` = 480 px, ~20–40 KB, used by the
+grid and carousel). Deleting a photo also removes its thumbnail. The album grid builds 60 tiles
+at a time and adds more as guests scroll.
+
+Photos processed before thumbnails existed: run once (safe to re-run, skips existing):
+```bash
+cd lambda/image-processor && npm ci
+AWS_PROFILE=wedding AWS_REGION=us-east-2 node backfill-thumbs.mjs <photo_bucket_name>
+```
+
 ## Troubleshooting
 
 | Symptom | Check |
