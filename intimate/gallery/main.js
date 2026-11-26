@@ -75,6 +75,7 @@ function render() {
     return li;
   }));
   $('#empty').hidden = photos.length > 0;
+  $('#photo-count').textContent = photos.length ? `· ${photos.length}` : '';
 }
 
 async function refresh() {
@@ -219,7 +220,7 @@ function setupLightbox() {
    while touched; stands still (and becomes swipeable) with prefers-reduced-motion. */
 const CAROUSEL_MAX = 12;
 const CAROUSEL_MIN = 8;        // fill wide screens even with few photos
-const SECONDS_PER_PHOTO = 4;   // speed
+const SECONDS_PER_PHOTO = 7;   // speed: higher = slower
 let carouselKeys = '';
 
 async function loadCarousel() {

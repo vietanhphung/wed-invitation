@@ -13,8 +13,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=20261125190031">
-<link rel="stylesheet" href="../gallery/gallery.css?v=20261125190031">
+<link rel="stylesheet" href="../style.css?v=20261125190828">
+<link rel="stylesheet" href="../gallery/gallery.css?v=20261125190828">
 </head>
 <body>
 <header class="g-top">
@@ -22,11 +22,11 @@
   <a class="text-link" href="../">Thiệp mời</a>
 </header>
 
-<main class="g-main g-upload-page">
+<main class="g-main">
   <div class="section-head">
     <p class="kicker"><i></i>Tiệc cưới thân mật<i></i></p>
     <h1 class="title">Album <em>chung</em></h1>
-    <p class="g-intro">Những khoảnh khắc bạn ghi lại là món quà quý của chúng mình. Hãy gửi ảnh vào đây để mọi người cùng xem nhé.</p>
+    <p class="g-intro">Những khoảnh khắc khách mời đã ghi lại trong ngày vui của chúng mình.</p>
   </div>
 
   <div class="g-upload" id="upload-box">
@@ -44,9 +44,14 @@
     <ul class="g-track" id="carousel-track"></ul>
   </section>
 
+  <!-- separates the moving strip from the full album -->
+  <div class="g-all-head">
+    <p class="kicker"><i></i>Tất cả ảnh<span class="g-count" id="photo-count"></span><i></i></p>
+  </div>
+
   <p class="g-note" id="notice" hidden></p>
 
-  <p class="g-empty" id="empty" hidden>Chưa có ảnh nào — bạn hãy là người đầu tiên nhé!</p>
+  <p class="g-empty" id="empty" hidden>Chưa có ảnh nào.</p>
   <ul class="g-grid" id="grid" aria-label="Ảnh trong album"></ul>
 </main>
 
@@ -57,7 +62,7 @@
   <button class="g-lb-btn g-lb-next" type="button" id="lb-next" aria-label="Ảnh sau">›</button>
 </dialog>
 
-<script src="../gallery/config.js?v=20261125190031"></script>
-<script type="module" src="../gallery/main.js?v=20261125190031"></script>
+<script src="../gallery/config.js?v=20261125190828"></script>
+<script type="module" src="../gallery/main.js?v=20261125190828"></script>
 </body>
 </html>
