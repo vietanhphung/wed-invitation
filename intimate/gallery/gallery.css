@@ -25,6 +25,7 @@
 /* upload page (QR code): just the button, centred on screen */
 .g-upload-only{display:grid;place-content:center;min-height:100dvh;padding-top:0;padding-bottom:0}
 .g-upload-only .g-upload{margin:0}
+.g-back{margin-top:8px}
 
 .g-upload{display:flex;flex-direction:column;align-items:center;gap:12px;margin:clamp(36px,5vw,56px) 0 0;text-align:center}
 .g-pick{cursor:pointer;min-width:min(100%,260px)}
