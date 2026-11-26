@@ -2,6 +2,7 @@
 [hidden]{display:none!important}
 
 .g-top{display:flex;align-items:center;justify-content:space-between;padding:22px var(--gutter)}
+.g-nav{display:flex;align-items:center;gap:clamp(18px,3vw,32px)}
 .g-mark{font:italic 400 1.35rem/1 var(--serif);color:var(--ink);text-decoration:none;letter-spacing:.04em}
 .g-mark i{color:var(--maple)}
 
@@ -50,9 +51,6 @@
 .g-del:hover{background:var(--maple)}
 .g-del:disabled{opacity:.5;cursor:progress}
 
-.g-foot{display:flex;justify-content:center;padding:0 var(--gutter) 40px}
-.g-admin-link{border:0;background:none;padding:6px;font:400 .62rem/1 var(--sans);letter-spacing:.26em;text-transform:uppercase;color:var(--taupe);cursor:pointer;opacity:.7}
-.g-admin-link:hover{opacity:1;color:var(--brown)}
 
 .g-lightbox{width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:rgba(20,16,14,.94)}
 .g-lightbox::backdrop{background:rgba(20,16,14,.94)}
